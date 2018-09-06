@@ -34,7 +34,7 @@ public class FileTool {
 		}
 	}
 
-	public static void writeLines(File file, Collection<String> lines) throws IOException {
+	public static void writeLines(File file, Collection<String> lines) {
 		file.getParentFile().mkdirs();
 		try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
 
@@ -42,27 +42,37 @@ public class FileTool {
 				bw.write(line);
 				bw.newLine();
 			}
+		} catch (IOException e) {
+			throw new RuntimeIOException(e);
 		}
 	}
 
-	public static void copyFile(File from, File to) throws IOException {
-		File[] children = from.listFiles();
-		if (children == null || children.length == 0) {
-			if (from.isDirectory()) {
-				to.mkdirs();
+	public static void copyFile(File from, File to) {
+		try {
+			File[] children = from.listFiles();
+			if (children == null || children.length == 0) {
+				if (from.isDirectory()) {
+					to.mkdirs();
+				} else {
+					to.getParentFile().mkdirs();
+					Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				}
 			} else {
-				to.getParentFile().mkdirs();
-				Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				for (File child : children) {
+					copyFile(child, new File(to, child.getName()));
+				}
 			}
-		} else {
-			for (File child : children) {
-				copyFile(child, new File(to, child.getName()));
-			}
+		} catch (IOException e) {
+			throw new RuntimeIOException(e);
 		}
 	}
 
-	public static void copyFile(File from, OutputStream to) throws IOException {
-		StreamTool.copyStream(new FileInputStream(from), to);
+	public static void copyFile(File from, OutputStream to) {
+		try {
+			StreamTool.copyStream(new FileInputStream(from), to);
+		} catch (IOException e) {
+			throw new RuntimeIOException(e);
+		}
 	}
 
 	public static void delete(File delete) {
@@ -77,12 +87,16 @@ public class FileTool {
 		delete.delete();
 	}
 
-	public static void moveFile(File from, File to) throws IOException {
-		to.getParentFile().mkdirs();
-		Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	public static void moveFile(File from, File to) {
+		try {
+			to.getParentFile().mkdirs();
+			Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			throw new RuntimeIOException(e);
+		}
 	}
 
-	public static String toString(File file) throws IOException {
+	public static String toString(File file) {
 		return String.join("\r\n", readLines(file));
 	}
 

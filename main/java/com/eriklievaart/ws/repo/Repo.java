@@ -1,7 +1,6 @@
 package com.eriklievaart.ws.repo;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
@@ -12,6 +11,7 @@ import com.eriklievaart.ws.config.ResourcePaths;
 import com.eriklievaart.ws.config.dependency.DependencyReference;
 import com.eriklievaart.ws.toolkit.io.Console;
 import com.eriklievaart.ws.toolkit.io.FileTool;
+import com.eriklievaart.ws.toolkit.io.RuntimeIOException;
 
 public class Repo {
 
@@ -33,8 +33,8 @@ public class Repo {
 		try {
 			FileTool.copyFile(jar, repoJar);
 			FileTool.copyFile(source, repoSource);
-		} catch (IOException e) {
-			throw new RuntimeException("unable to store snapshot of " + artifactId, e);
+		} catch (RuntimeIOException e) {
+			throw new RuntimeIOException("unable to store snapshot of " + artifactId, e);
 		}
 		addToIndex(new DependencyReference(artifactId));
 	}
@@ -49,7 +49,7 @@ public class Repo {
 			File stored = lookup(dependency);
 			System.out.println("\tcopying jar " + stored + " => " + destination);
 			FileTool.copyFile(stored, destination);
-		} catch (IOException e) {
+		} catch (RuntimeIOException e) {
 			throw new RuntimeException("Unable to copy dependency " + dependency, e);
 		}
 	}
@@ -103,18 +103,14 @@ public class Repo {
 	}
 
 	private static void store() {
-		List<DependencyReference> references = new ArrayList<DependencyReference>(index.values());
+		List<DependencyReference> references = new ArrayList<>(index.values());
 		Collections.sort(references);
 
 		List<String> lines = new ArrayList<>();
 		for (DependencyReference reference : references) {
 			lines.add(reference.getArtifactId() + ":" + reference.getGroupId() + ":" + reference.getVersion());
 		}
-		try {
-			FileTool.writeLines(ResourcePaths.getIndexFile(), lines);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		FileTool.writeLines(ResourcePaths.getIndexFile(), lines);
 	}
 
 	private static void load() {

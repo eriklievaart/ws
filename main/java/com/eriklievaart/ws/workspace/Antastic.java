@@ -2,7 +2,6 @@
 package com.eriklievaart.ws.workspace;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ import com.eriklievaart.ws.toolkit.io.FileTool;
 
 public class Antastic {
 
-	public static void generateMetadata() throws IOException {
+	public static void generateMetadata() {
 		List<String> lines = new ArrayList<>();
 		File file = ResourcePaths.getDestinationAntaticConfigFile();
 		System.out.println("Generating antastic metadata in " + file);

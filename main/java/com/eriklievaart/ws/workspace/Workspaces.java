@@ -1,7 +1,6 @@
 package com.eriklievaart.ws.workspace;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -30,20 +29,16 @@ public class Workspaces {
 	}
 
 	public static void generateAll() {
-		try {
-			Set<String> projects = new HashSet<>();
+		Set<String> projects = new HashSet<>();
 
-			iterateWorkspaces(ws -> {
-				createWorkspace(ws.getName());
-				projects.addAll(ws.getProjects());
-			});
-			for (String project : projects) {
-				Eclipse.generateProjectMetadata(project);
-			}
-			Antastic.generateMetadata();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		iterateWorkspaces(ws -> {
+			createWorkspace(ws.getName());
+			projects.addAll(ws.getProjects());
+		});
+		for (String project : projects) {
+			Eclipse.generateProjectMetadata(project);
 		}
+		Antastic.generateMetadata();
 	}
 
 	public static void createWorkspace(String workspace) {
@@ -116,12 +111,8 @@ public class Workspaces {
 	}
 
 	private static void save() {
-		try {
-			FileTool.writeLines(EclipsePaths.getWorkspacesFile(), WorkspacesIO.getLines(workspaces.values()));
-			Antastic.generateMetadata();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		FileTool.writeLines(EclipsePaths.getWorkspacesFile(), WorkspacesIO.getLines(workspaces.values()));
+		Antastic.generateMetadata();
 	}
 
 	public static void showInfo(String workspace) {

@@ -8,4 +8,8 @@ public class RuntimeIOException extends RuntimeException {
 		super(e);
 	}
 
+	public RuntimeIOException(String message, RuntimeIOException e) {
+		super(message, e);
+	}
+
 }
