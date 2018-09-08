@@ -47,6 +47,7 @@ Dependencies are marked in the dependencies.txt file as follows
 
 The header can be any of the following
 * compile => required at compile time and at run time
+* bundle => depends on an osgi bundle
 * provided => required at compile time, NOT at run time (may be provided by server)
 * run => required at run time, NOT at compile time
 * test => only tests may compile and run against this dependency
@@ -96,8 +97,8 @@ Generating Eclipse metadata is done automatically on changes, but can be manuall
 
 generate foo
 
-Invoke ws with a single argument 'generate' to generate metadata for all configured workspaces.
+Invoke ws with 'generate +' to generate metadata for all configured workspaces.
 
-java -jar ws.jar generate
+java -jar ws.jar generate +
 
 
