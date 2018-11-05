@@ -61,7 +61,21 @@ public class ProjectDependencies {
 			}
 			lines.add("");
 		}
-		FileTool.writeLines(file, lines);
+		if (!file.exists() || !isTheSame(lines, FileTool.readLines(file))) {
+			FileTool.writeLines(file, lines);
+		}
+	}
+
+	private boolean isTheSame(List<String> a, List<String> b) {
+		if (a.size() != b.size()) {
+			return false;
+		}
+		for (int i = 0; i < a.size(); i++) {
+			if (!a.get(i).equals(b.get(i))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public void resolveAll() {
