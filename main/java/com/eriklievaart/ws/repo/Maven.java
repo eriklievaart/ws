@@ -24,6 +24,7 @@ public class Maven {
 		MIRRORS.add("https://maven.antelink.com/content/repositories/central/");
 		MIRRORS.add("https://maven2.mirrors.skynet.be/pub/maven2/");
 		MIRRORS.add("https://repo.maven.apache.org/maven2");
+		MIRRORS.add("http://repository.springsource.com/maven/bundles/release");
 	}
 
 	public static void download(DependencyReference dependency, File destination) {

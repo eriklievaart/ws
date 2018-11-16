@@ -21,8 +21,10 @@ public class BundleMetadata implements ManifestSource {
 
 	private void indexBundles() {
 		File dir = ResourcePaths.getSourcePackageDir(project);
-		for (String bundle : dir.list()) {
-			bundles.put(bundle, new BundlePackage(project, bundle));
+		if (dir != null & dir.isDirectory()) {
+			for (String bundle : dir.list()) {
+				bundles.put(bundle, new BundlePackage(project, bundle));
+			}
 		}
 	}
 

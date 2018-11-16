@@ -3,8 +3,10 @@ package com.eriklievaart.ws.workspace;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
 
@@ -14,8 +16,8 @@ import com.eriklievaart.ws.config.dependency.DependencyReference;
 import com.eriklievaart.ws.config.dependency.Header;
 import com.eriklievaart.ws.config.dependency.LibType;
 import com.eriklievaart.ws.repo.Repo;
+import com.eriklievaart.ws.toolkit.io.Console;
 import com.eriklievaart.ws.toolkit.io.FileTool;
-import com.eriklievaart.ws.toolkit.io.UrlTool;
 
 public class ProjectDependencies {
 
@@ -80,16 +82,30 @@ public class ProjectDependencies {
 
 	public void resolveAll() {
 		for (Header header : index.values()) {
+			Set<String> keep = new HashSet<>();
+
 			for (DependencyReference dependency : header.getDependencies()) {
-				repo.resolve(dependency, getProjectJar(header, dependency));
+				File jar = getProjectJar(header, dependency);
+				repo.resolve(dependency, jar);
+				keep.add(jar.getName());
+			}
+			for (File lib : getLibDir(header).listFiles()) {
+				if (!keep.contains(lib.getName())) {
+					Console.printWarning("Deleting dependency: " + lib);
+					lib.delete();
+				}
 			}
 		}
 	}
 
 	private File getProjectJar(Header header, DependencyReference reference) {
 		LibType.parse(header.getName()); // header name must be a valid LibType
-		String path = UrlTool.append(header.getName(), reference.getArtifactId() + ".jar");
-		return new File(ResourcePaths.getLibRootDir(project), path);
+		String path = reference.getArtifactId() + ".jar";
+		return new File(getLibDir(header), path);
+	}
+
+	private File getLibDir(Header header) {
+		return new File(ResourcePaths.getLibRootDir(project), header.getName());
 	}
 
 	public void iterate(BiConsumer<LibType, DependencyReference> consumer) {

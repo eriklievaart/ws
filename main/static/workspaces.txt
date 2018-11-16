@@ -1,9 +1,10 @@
 antastic antastic toolkit
 blog blog javalightning pb-parser toolkit
 doclauncher doclauncher
-hu felix hu javalightning toolkit
+felix felix tmp
+hu felix hu javalightning osgi toolkit
 links links
-q felix q toolkit
+q felix osgi q toolkit
 refactor refactor
 regex regex
 synch synch toolkit
