@@ -2,26 +2,24 @@ package com.eriklievaart.ws.process;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class JlsModifierSubstitutor {
+public class JlsModifierProcessor implements LineProcessor {
 	private static final List<String> SORTED_MODIFIERS = Arrays.asList("public", "protected", "private", "abstract",
 			"static", "final", "transient", "volatile", "synchronized", "native", "strictfp");
 
 	private final String identifier;
-	private final List<String> lines;
-	private boolean jlsViolations = false;
 
-	public JlsModifierSubstitutor(String identifier, List<String> lines) {
+	public JlsModifierProcessor(String identifier) {
 		this.identifier = identifier;
-		this.lines = lines;
-		process();
 	}
 
-	private void process() {
+	@Override
+	public boolean modify(List<String> lines) {
+		boolean jlsViolations = false;
+
 		for (int l = 0; l < lines.size(); l++) {
 			String trimmed = lines.get(l).trim();
 			String[] split = trimmed.split("\\s++");
@@ -30,25 +28,23 @@ public class JlsModifierSubstitutor {
 			for (int w = 0; w < modifierCount; w++) {
 				modifiers.add(split[w]);
 			}
-			sortModifiersOnLine(l, modifiers);
+			if (!isSorted(modifiers)) {
+				jlsViolations = true;
+				System.out.println("JLS modifier order violation in " + identifier + ":" + l);
+				String line = lines.remove(l);
+				lines.add(l, sortModifiersOnLine(line, modifiers));
+			}
 		}
+		return jlsViolations;
 	}
 
-	private void sortModifiersOnLine(int lineNumber, List<String> modifiers) {
-		boolean needsSort = isSorted(modifiers);
-
-		if (!needsSort) {
-			String line = lines.get(lineNumber);
-			jlsViolations = true;
-			System.out.println("JLS modifier order violation in " + identifier + ":" + lineNumber);
-			sortModifiers(modifiers);
-			String head = line.replaceAll("\\S++\\s*+", "");
-			String tail = line.trim().replaceFirst("(\\s*+\\S++){" + modifiers.size() + "}", "");
-			lines.remove(lineNumber);
-			String fixed = head + String.join(" ", modifiers) + tail;
-			lines.add(lineNumber, fixed);
-			System.out.println("- " + line + "\n" + "+" + fixed + "\n");
-		}
+	private String sortModifiersOnLine(String line, List<String> modifiers) {
+		sortModifiers(modifiers);
+		String head = line.replaceAll("\\S++\\s*+", "");
+		String tail = line.trim().replaceFirst("(\\s*+\\S++){" + modifiers.size() + "}", "");
+		String fixed = head + String.join(" ", modifiers) + tail;
+		System.out.println("- " + line + "\n" + "+" + fixed + "\n");
+		return fixed;
 	}
 
 	private void sortModifiers(List<String> modifiers) {
@@ -81,11 +77,4 @@ public class JlsModifierSubstitutor {
 		return split.length;
 	}
 
-	public Collection<String> getLines() {
-		return lines;
-	}
-
-	public boolean hasJlsViolations() {
-		return jlsViolations;
-	}
 }

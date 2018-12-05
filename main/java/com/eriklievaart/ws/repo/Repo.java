@@ -69,6 +69,10 @@ public class Repo {
 		return new File(ResourcePaths.getRemoteDir(), Maven.getMavenPath(dependency));
 	}
 
+	public DependencyReference normalize(DependencyReference dependency) {
+		return index.getOrDefault(dependency.getArtifactId(), dependency);
+	}
+
 	private File lookup(DependencyReference dependency) {
 		DependencyReference reference = index.get(dependency.getArtifactId());
 		if (reference == null) {
@@ -148,5 +152,12 @@ public class Repo {
 		dependency.setGroupId(split[1]);
 		dependency.setVersion(split[2]);
 		return dependency;
+	}
+
+	public long getTimestamp(DependencyReference dependency) {
+		if (!dependency.isSnapshot()) {
+			throw new RuntimeException("method only supported for snapshots: " + dependency);
+		}
+		return lookup(dependency).lastModified();
 	}
 }

@@ -48,6 +48,14 @@ public class DependencyReference implements Comparable<DependencyReference> {
 		return version.equals(SNAPSHOT);
 	}
 
+	public String getVersionedFileName() {
+		if (isSnapshot()) {
+			return getArtifactId() + ".jar";
+		} else {
+			return getArtifactId() + "-" + getVersion() + ".jar";
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "Dependency[" + artifactId + ", " + groupId + ", " + version + "]";

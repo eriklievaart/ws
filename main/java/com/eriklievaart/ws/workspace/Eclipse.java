@@ -102,7 +102,7 @@ public class Eclipse {
 
 	private static String getClassPathEntry(LibType lib, DependencyReference dependency, File sources) {
 		PropertyReplacer replacer = new PropertyReplacer();
-		replacer.replace("@jar@", UrlTool.append("lib", lib.getDir(), dependency.getArtifactId() + ".jar"));
+		replacer.replace("@jar@", UrlTool.append("lib", lib.getDir(), dependency.getVersionedFileName()));
 		replacer.replace("@sources@", sources.getAbsolutePath());
 		return replacer.apply("\t<classpathentry kind=\"lib\" path=\"@jar@\" sourcepath=\"@sources@\"/>\n");
 	}

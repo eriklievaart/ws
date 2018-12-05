@@ -2,8 +2,11 @@ package com.eriklievaart.ws.boot;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
-import com.eriklievaart.ws.process.JlsModifierSubstitutor;
+import com.eriklievaart.ws.process.ChainedLineProcessor;
+import com.eriklievaart.ws.process.EmptyLineProcessor;
+import com.eriklievaart.ws.process.JlsModifierProcessor;
 import com.eriklievaart.ws.toolkit.io.FileTool;
 
 public class PreProcess {
@@ -24,9 +27,12 @@ public class PreProcess {
 
 	private static void processRoot(File root) throws IOException {
 		for (File file : FileTool.listFiles(root)) {
-			JlsModifierSubstitutor sub = new JlsModifierSubstitutor(file.getAbsolutePath(), FileTool.readLines(file));
-			if (sub.hasJlsViolations()) {
-				FileTool.writeLines(file, sub.getLines());
+			List<String> lines = FileTool.readLines(file);
+			JlsModifierProcessor jls = new JlsModifierProcessor(file.getAbsolutePath());
+			EmptyLineProcessor empty = new EmptyLineProcessor();
+			ChainedLineProcessor processor = new ChainedLineProcessor(jls, empty);
+			if (processor.modify(lines)) {
+				FileTool.writeLines(file, lines);
 			}
 		}
 	}

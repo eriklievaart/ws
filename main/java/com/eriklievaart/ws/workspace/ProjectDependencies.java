@@ -82,26 +82,43 @@ public class ProjectDependencies {
 
 	public void resolveAll() {
 		for (Header header : index.values()) {
-			Set<String> keep = new HashSet<>();
+			Set<String> keep = resolveLibDir(header);
+			deleteUnusedDependencies(header, keep);
+		}
+	}
 
-			for (DependencyReference dependency : header.getDependencies()) {
-				File jar = getProjectJar(header, dependency);
+	private Set<String> resolveLibDir(Header header) {
+		Set<String> keep = new HashSet<>();
+
+		for (DependencyReference dependency : header.getDependencies()) {
+			File jar = getProjectJar(header, repo.normalize(dependency));
+			if (isUpdateRequired(dependency, jar)) {
 				repo.resolve(dependency, jar);
-				keep.add(jar.getName());
 			}
-			for (File lib : getLibDir(header).listFiles()) {
-				if (!keep.contains(lib.getName())) {
-					Console.printWarning("Deleting dependency: " + lib);
-					lib.delete();
-				}
+			keep.add(jar.getName());
+		}
+		return keep;
+	}
+
+	private void deleteUnusedDependencies(Header header, Set<String> keep) {
+		for (File lib : getLibDir(header).listFiles()) {
+			if (!keep.contains(lib.getName())) {
+				Console.printWarning("Deleting dependency: " + lib);
+				lib.delete();
 			}
 		}
 	}
 
+	private boolean isUpdateRequired(DependencyReference dependency, File jar) {
+		if (jar.exists() && dependency.isSnapshot()) {
+			return repo.getTimestamp(dependency) > jar.lastModified();
+		}
+		return !jar.exists();
+	}
+
 	private File getProjectJar(Header header, DependencyReference reference) {
 		LibType.parse(header.getName()); // header name must be a valid LibType
-		String path = reference.getArtifactId() + ".jar";
-		return new File(getLibDir(header), path);
+		return new File(getLibDir(header), reference.getVersionedFileName());
 	}
 
 	private File getLibDir(Header header) {
