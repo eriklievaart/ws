@@ -30,5 +30,4 @@ public class Migrate {
 	private static String updateLibType(String old) {
 		return old.replaceFirst("main-([^ ]++)", "$1").replaceFirst("test-[^ ]++", "test");
 	}
-
 }

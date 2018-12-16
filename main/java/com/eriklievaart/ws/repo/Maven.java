@@ -63,5 +63,4 @@ public class Maven {
 		String jar = dependency.getArtifactId() + "-" + dependency.getVersion() + ".jar";
 		return UrlTool.append(group, dependency.getArtifactId(), dependency.getVersion(), jar);
 	}
-
 }

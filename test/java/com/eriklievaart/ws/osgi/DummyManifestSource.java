@@ -94,5 +94,4 @@ public class DummyManifestSource implements ManifestSource {
 	public void addImport(String pkg) {
 		imports.add(new ImportStatement(pkg, null));
 	}
-
 }

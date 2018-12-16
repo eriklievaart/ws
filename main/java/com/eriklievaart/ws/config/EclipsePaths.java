@@ -46,5 +46,4 @@ public class EclipsePaths {
 	public static File getDestinationWorkbench(String workspace) {
 		return new File(getWorkspaceRootDir(workspace), ".metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi");
 	}
-
 }

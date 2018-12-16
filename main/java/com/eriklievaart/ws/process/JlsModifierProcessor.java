@@ -76,5 +76,4 @@ public class JlsModifierProcessor implements LineProcessor {
 		}
 		return split.length;
 	}
-
 }

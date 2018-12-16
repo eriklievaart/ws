@@ -35,5 +35,4 @@ public class PackageSorter {
 		}
 		return importOrder.size() + 1;
 	}
-
 }

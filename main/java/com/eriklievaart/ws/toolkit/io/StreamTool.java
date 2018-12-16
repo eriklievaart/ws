@@ -81,5 +81,4 @@ public class StreamTool {
 			writer.write(data);
 		}
 	}
-
 }

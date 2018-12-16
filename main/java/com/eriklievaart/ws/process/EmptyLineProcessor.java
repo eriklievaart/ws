@@ -20,5 +20,4 @@ public class EmptyLineProcessor implements LineProcessor {
 		}
 		return changed;
 	}
-
 }

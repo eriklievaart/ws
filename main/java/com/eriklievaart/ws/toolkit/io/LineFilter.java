@@ -15,5 +15,4 @@ public class LineFilter {
 		}
 		return result;
 	}
-
 }

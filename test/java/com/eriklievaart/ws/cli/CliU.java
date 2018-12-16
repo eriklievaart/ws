@@ -59,5 +59,4 @@ public class CliU {
 	public void parseAndInvokeExtraProject() throws CliInputException {
 		Cli.parseAndInvoke("trash q toolkit"); // project where not expected
 	}
-
 }

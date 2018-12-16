@@ -138,5 +138,4 @@ public class ResourcePaths {
 	public static File getSourceJavaDir(String project, String bundle) {
 		return new File(PropertyReplacer.bundle(project, bundle).apply(SOURCE_JAVA_DIR));
 	}
-
 }
