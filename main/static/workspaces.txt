@@ -1,8 +1,10 @@
 antastic antastic toolkit
 blog blog javalightning pb-parser toolkit
+crawl crawl toolkit
 doclauncher doclauncher
 felix felix tmp
-hu felix hufront huback hushared javalightning osgi toolkit
+hu felix huback hufront hushared javalightning osgi tmp toolkit
+imager imager toolkit
 links links
 q felix osgi q toolkit
 refactor refactor
