@@ -16,8 +16,8 @@ import com.eriklievaart.ws.config.dependency.DependencyReference;
 import com.eriklievaart.ws.config.dependency.Header;
 import com.eriklievaart.ws.config.dependency.LibType;
 import com.eriklievaart.ws.repo.Repo;
-import com.eriklievaart.ws.toolkit.io.Console;
-import com.eriklievaart.ws.toolkit.io.FileTool;
+import com.eriklievaart.ws.toolkit.io.ConsoleUtils;
+import com.eriklievaart.ws.toolkit.io.FileUtils;
 
 public class ProjectDependencies {
 
@@ -63,8 +63,8 @@ public class ProjectDependencies {
 			}
 			lines.add("");
 		}
-		if (!file.exists() || !isTheSame(lines, FileTool.readLines(file))) {
-			FileTool.writeLines(file, lines);
+		if (!file.exists() || !isTheSame(lines, FileUtils.readLines(file))) {
+			FileUtils.writeLines(file, lines);
 		}
 	}
 
@@ -103,7 +103,7 @@ public class ProjectDependencies {
 	private void deleteUnusedDependencies(Header header, Set<String> keep) {
 		for (File lib : getLibDir(header).listFiles()) {
 			if (!keep.contains(lib.getName())) {
-				Console.printWarning("Deleting dependency: " + lib);
+				ConsoleUtils.printWarning("Deleting dependency: " + lib);
 				lib.delete();
 			}
 		}

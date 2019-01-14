@@ -11,8 +11,8 @@ import java.util.List;
 
 import com.eriklievaart.ws.config.ResourcePaths;
 import com.eriklievaart.ws.config.dependency.DependencyReference;
-import com.eriklievaart.ws.toolkit.io.StreamTool;
-import com.eriklievaart.ws.toolkit.io.UrlTool;
+import com.eriklievaart.ws.toolkit.io.StreamUtils;
+import com.eriklievaart.ws.toolkit.io.UrlUtils;
 
 public class Maven {
 
@@ -28,7 +28,7 @@ public class Maven {
 	}
 
 	public static void download(DependencyReference dependency, File destination) {
-		String url = UrlTool.append(MIRRORS.get(0), getMavenPath(dependency));
+		String url = UrlUtils.append(MIRRORS.get(0), getMavenPath(dependency));
 		try {
 			httpGet(url, destination);
 		} catch (IOException e) {
@@ -51,7 +51,7 @@ public class Maven {
 		System.out.println("GET URL : " + url + " status " + responseCode);
 		destination.getParentFile().mkdirs();
 		try (InputStream is = connection.getInputStream(); FileOutputStream fos = new FileOutputStream(destination)) {
-			StreamTool.copyStream(is, fos);
+			StreamUtils.copyStream(is, fos);
 		}
 		if (destination.length() == 0) {
 			destination.delete();
@@ -61,6 +61,6 @@ public class Maven {
 	public static String getMavenPath(DependencyReference dependency) {
 		String group = dependency.getGroupId().replace('.', '/');
 		String jar = dependency.getArtifactId() + "-" + dependency.getVersion() + ".jar";
-		return UrlTool.append(group, dependency.getArtifactId(), dependency.getVersion(), jar);
+		return UrlUtils.append(group, dependency.getArtifactId(), dependency.getVersion(), jar);
 	}
 }

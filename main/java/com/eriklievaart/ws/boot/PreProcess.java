@@ -7,7 +7,8 @@ import java.util.List;
 import com.eriklievaart.ws.process.ChainedLineProcessor;
 import com.eriklievaart.ws.process.EmptyLineProcessor;
 import com.eriklievaart.ws.process.JlsModifierProcessor;
-import com.eriklievaart.ws.toolkit.io.FileTool;
+import com.eriklievaart.ws.process.whitespace.WhitespaceFileScanner;
+import com.eriklievaart.ws.toolkit.io.FileUtils;
 
 public class PreProcess {
 
@@ -21,18 +22,20 @@ public class PreProcess {
 			if (!root.isDirectory()) {
 				throw new IOException("not a directory: " + root);
 			}
+			System.out.println("running preprocess in " + root);
 			processRoot(root);
+			new WhitespaceFileScanner().removeTrailingWhitespace(root);
 		}
 	}
 
 	private static void processRoot(File root) throws IOException {
-		for (File file : FileTool.listFiles(root)) {
-			List<String> lines = FileTool.readLines(file);
+		for (File file : FileUtils.listJavaFiles(root)) {
+			List<String> lines = FileUtils.readLines(file);
 			JlsModifierProcessor jls = new JlsModifierProcessor(file.getAbsolutePath());
 			EmptyLineProcessor empty = new EmptyLineProcessor();
 			ChainedLineProcessor processor = new ChainedLineProcessor(jls, empty);
 			if (processor.modify(lines)) {
-				FileTool.writeLines(file, lines);
+				FileUtils.writeLines(file, lines);
 			}
 		}
 	}

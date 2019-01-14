@@ -5,9 +5,9 @@ package com.eriklievaart.ws.toolkit.io;
  *
  * @author Erik Lievaart
  */
-public class UrlTool {
+public class UrlUtils {
 
-	private UrlTool() {
+	private UrlUtils() {
 	}
 
 	public static String append(String a, String b) {

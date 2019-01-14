@@ -2,14 +2,14 @@ package com.eriklievaart.ws.config;
 
 import java.io.File;
 
-import com.eriklievaart.ws.toolkit.io.UrlTool;
+import com.eriklievaart.ws.toolkit.io.UrlUtils;
 
 public class ResourcePaths {
 
 	private static final String REPO_DIR = "@home@/Development/repo";
-	private static final String INDEX_FILE = UrlTool.append(REPO_DIR, "index.txt");
-	private static final String REMOTE_DIR = UrlTool.append(REPO_DIR, "remote");
-	private static final String SNAPSHOT_FILE = UrlTool.append(REPO_DIR, "local/@project@/snapshot/@project@.jar");
+	private static final String INDEX_FILE = UrlUtils.append(REPO_DIR, "index.txt");
+	private static final String REMOTE_DIR = UrlUtils.append(REPO_DIR, "remote");
+	private static final String SNAPSHOT_FILE = UrlUtils.append(REPO_DIR, "local/@project@/snapshot/@project@.jar");
 
 	private static final String DEPENDENCY_FILE = "@home@/Development/git/@project@/main/config/dependencies.txt";
 	private static final String ANT_PROPERTY_FILE = "@home@/Development/git/@project@/main/config/ant.properties";
@@ -20,23 +20,23 @@ public class ResourcePaths {
 	private static final String ANTASTIC_CONFIG_FILE = "@home@/Applications/antastic/data/antastic.ini";
 
 	private static final String SOURCE_GIT_DIR = "@home@/Development/git/@project@";
-	private static final String SOURCE_JAVA_DIR = UrlTool.append(SOURCE_GIT_DIR, "main/java");
-	private static final String SOURCE_PACKAGE_DIR = UrlTool.append(SOURCE_JAVA_DIR, "com/eriklievaart/@project@");
-	private static final String SOURCE_MASTER_ACTIVATOR_FILE = UrlTool.append(SOURCE_PACKAGE_DIR, "Activator.java");
+	private static final String SOURCE_JAVA_DIR = UrlUtils.append(SOURCE_GIT_DIR, "main/java");
+	private static final String SOURCE_PACKAGE_DIR = UrlUtils.append(SOURCE_JAVA_DIR, "com/eriklievaart/@project@");
+	private static final String SOURCE_MASTER_ACTIVATOR_FILE = UrlUtils.append(SOURCE_PACKAGE_DIR, "Activator.java");
 	private static final String SOURCE_MASTER_PACKAGE = "com.eriklievaart.@project@";
 	private static final String SOURCE_MASTER_ACTIVATOR_CLASS = "com.eriklievaart.@project@.Activator";
-	private static final String SOURCE_BUNDLE_DIR = UrlTool.append(SOURCE_PACKAGE_DIR, "@bundle@");
-	private static final String SOURCE_BUNDLE_ACTIVATOR_FILE = UrlTool.append(SOURCE_BUNDLE_DIR, "Activator.java");
+	private static final String SOURCE_BUNDLE_DIR = UrlUtils.append(SOURCE_PACKAGE_DIR, "@bundle@");
+	private static final String SOURCE_BUNDLE_ACTIVATOR_FILE = UrlUtils.append(SOURCE_BUNDLE_DIR, "Activator.java");
 	private static final String SOURCE_BUNDLE_PACKAGE = "com.eriklievaart.@project@.@bundle@";
 	private static final String SOURCE_BUNDLE_ACTIVATOR_CLASS = "com.eriklievaart.@project@.@bundle@.Activator";
 
 	private static final String BUILD_MANIFEST_DIR = "/tmp/build/@project@/spool/manifest";
-	private static final String BUILD_MASTER_MANIFEST = UrlTool.append(BUILD_MANIFEST_DIR, "@project@.txt");
-	private static final String BUILD_BUNDLE_MANIFEST = UrlTool.append(BUILD_MANIFEST_DIR, "@project@-@bundle@.txt");
+	private static final String BUILD_MASTER_MANIFEST = UrlUtils.append(BUILD_MANIFEST_DIR, "@project@.txt");
+	private static final String BUILD_BUNDLE_MANIFEST = UrlUtils.append(BUILD_MANIFEST_DIR, "@project@-@bundle@.txt");
 
 	private static final String DESTINATION_PROJECT_DIR = "@home@/Development/project/@project@";
-	private static final String DESTINATION_PROJECT_FILE = UrlTool.append(DESTINATION_PROJECT_DIR, ".project");
-	private static final String DESTINATION_CLASSPATH_FILE = UrlTool.append(DESTINATION_PROJECT_DIR, ".classpath");
+	private static final String DESTINATION_PROJECT_FILE = UrlUtils.append(DESTINATION_PROJECT_DIR, ".project");
+	private static final String DESTINATION_CLASSPATH_FILE = UrlUtils.append(DESTINATION_PROJECT_DIR, ".classpath");
 
 	public static File getSnapshotFile(String project) {
 		return new File(PropertyReplacer.project(project).apply(SNAPSHOT_FILE));

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class StreamTool {
+public class StreamUtils {
 
 	public static void copyStream(InputStream input, OutputStream output) throws IOException {
 		try {
@@ -53,7 +53,7 @@ public class StreamTool {
 
 	public static String toString(InputStream is, String encoding) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		StreamTool.copyStream(is, baos);
+		StreamUtils.copyStream(is, baos);
 		return baos.toString(encoding);
 	}
 

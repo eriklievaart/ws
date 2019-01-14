@@ -9,9 +9,9 @@ import java.util.Map;
 
 import com.eriklievaart.ws.config.ResourcePaths;
 import com.eriklievaart.ws.config.dependency.DependencyReference;
-import com.eriklievaart.ws.toolkit.io.Console;
-import com.eriklievaart.ws.toolkit.io.FileTool;
-import com.eriklievaart.ws.toolkit.io.RuntimeIOException;
+import com.eriklievaart.ws.toolkit.io.ConsoleUtils;
+import com.eriklievaart.ws.toolkit.io.FileUtils;
+import com.eriklievaart.ws.toolkit.io.IORuntimeException;
 
 public class Repo {
 
@@ -31,10 +31,10 @@ public class Repo {
 		File repoSource = ResourcePaths.getSourceJar(repoJar);
 
 		try {
-			FileTool.copyFile(jar, repoJar);
-			FileTool.copyFile(source, repoSource);
-		} catch (RuntimeIOException e) {
-			throw new RuntimeIOException("unable to store snapshot of " + artifactId, e);
+			FileUtils.copyFile(jar, repoJar);
+			FileUtils.copyFile(source, repoSource);
+		} catch (IORuntimeException e) {
+			throw new IORuntimeException("unable to store snapshot of " + artifactId, e);
 		}
 		addToIndex(new DependencyReference(artifactId));
 	}
@@ -48,8 +48,8 @@ public class Repo {
 		try {
 			File stored = lookup(dependency);
 			System.out.println("\tcopying jar " + stored + " => " + destination);
-			FileTool.copyFile(stored, destination);
-		} catch (RuntimeIOException e) {
+			FileUtils.copyFile(stored, destination);
+		} catch (IORuntimeException e) {
 			throw new RuntimeException("Unable to copy dependency " + dependency, e);
 		}
 	}
@@ -114,7 +114,7 @@ public class Repo {
 		for (DependencyReference reference : references) {
 			lines.add(reference.getArtifactId() + ":" + reference.getGroupId() + ":" + reference.getVersion());
 		}
-		FileTool.writeLines(ResourcePaths.getIndexFile(), lines);
+		FileUtils.writeLines(ResourcePaths.getIndexFile(), lines);
 	}
 
 	private static void load() {
@@ -123,13 +123,13 @@ public class Repo {
 		if (file.exists()) {
 			load(file);
 		} else {
-			Console.printError("*warning*: repo does not exist: " + file);
+			ConsoleUtils.printError("*warning*: repo does not exist: " + file);
 		}
 	}
 
 	private static void load(File file) {
 		try {
-			List<String> lines = FileTool.readLines(file);
+			List<String> lines = FileUtils.readLines(file);
 			for (int i = 0; i < lines.size(); i++) {
 				String line = lines.get(i).trim();
 				if (line.isEmpty() || line.startsWith("#")) {

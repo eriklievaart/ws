@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.eriklievaart.ws.config.ResourcePaths;
-import com.eriklievaart.ws.toolkit.io.FileTool;
+import com.eriklievaart.ws.toolkit.io.FileUtils;
 
 public class Antastic {
 
@@ -19,7 +19,7 @@ public class Antastic {
 		iterateProjects(lines);
 		iterateWorkspaces(lines);
 
-		FileTool.writeLines(file, lines);
+		FileUtils.writeLines(file, lines);
 	}
 
 	public static void addMasterBuildFile(List<String> lines) {

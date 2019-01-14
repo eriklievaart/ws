@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.eriklievaart.ws.toolkit.io.FileTool;
+import com.eriklievaart.ws.toolkit.io.FileUtils;
 
 public class ManifestGenerator {
 
@@ -26,7 +26,7 @@ public class ManifestGenerator {
 
 	private void generateManifest(ManifestSource source) {
 		validateImports(source);
-		generateManifestBody(source).ifPresent(data -> FileTool.writeStringToFile(data, source.getManifestFile()));
+		generateManifestBody(source).ifPresent(data -> FileUtils.writeStringToFile(data, source.getManifestFile()));
 	}
 
 	static void validateImports(ManifestSource source) {

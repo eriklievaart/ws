@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.eriklievaart.ws.toolkit.io.StreamTool;
+import com.eriklievaart.ws.toolkit.io.StreamUtils;
 
 public class RuntimeTool {
 
@@ -25,7 +25,7 @@ public class RuntimeTool {
 			@Override
 			public void run() {
 				try {
-					StreamTool.copyStream(is, os);
+					StreamUtils.copyStream(is, os);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

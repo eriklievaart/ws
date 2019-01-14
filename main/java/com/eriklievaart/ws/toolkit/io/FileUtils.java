@@ -15,22 +15,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class FileTool {
+public class FileUtils {
 
 	public static void writeStringToFile(String data, File file) {
 		try {
 			file.getParentFile().mkdirs();
-			StreamTool.writeString(data, new FileOutputStream(file));
+			StreamUtils.writeString(data, new FileOutputStream(file));
 		} catch (FileNotFoundException e) {
-			throw new RuntimeIOException(e);
+			throw new IORuntimeException(e);
 		}
 	}
 
 	public static List<String> readLines(File file) {
 		try (InputStream is = new FileInputStream(file)) {
-			return StreamTool.readLines(is);
+			return StreamUtils.readLines(is);
 		} catch (IOException e) {
-			throw new RuntimeIOException(e);
+			throw new IORuntimeException(e);
 		}
 	}
 
@@ -43,7 +43,7 @@ public class FileTool {
 				bw.newLine();
 			}
 		} catch (IOException e) {
-			throw new RuntimeIOException(e);
+			throw new IORuntimeException(e);
 		}
 	}
 
@@ -63,15 +63,15 @@ public class FileTool {
 				}
 			}
 		} catch (IOException e) {
-			throw new RuntimeIOException(e);
+			throw new IORuntimeException(e);
 		}
 	}
 
 	public static void copyFile(File from, OutputStream to) {
 		try {
-			StreamTool.copyStream(new FileInputStream(from), to);
+			StreamUtils.copyStream(new FileInputStream(from), to);
 		} catch (IOException e) {
-			throw new RuntimeIOException(e);
+			throw new IORuntimeException(e);
 		}
 	}
 
@@ -92,7 +92,7 @@ public class FileTool {
 			to.getParentFile().mkdirs();
 			Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
-			throw new RuntimeIOException(e);
+			throw new IORuntimeException(e);
 		}
 	}
 
@@ -100,13 +100,13 @@ public class FileTool {
 		return String.join("\r\n", readLines(file));
 	}
 
-	public static List<File> listFiles(File file) {
+	public static List<File> listJavaFiles(File file) {
 		List<File> files = new ArrayList<>();
 
 		if (file.isDirectory()) {
 			File[] children = file.listFiles();
 			for (File child : children) {
-				files.addAll(listFiles(child));
+				files.addAll(listJavaFiles(child));
 			}
 		}
 		if (file.isFile() && file.getName().endsWith(".java")) {

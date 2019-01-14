@@ -8,14 +8,14 @@ import java.util.regex.Pattern;
 
 import com.eriklievaart.ws.config.PropertyReplacer;
 import com.eriklievaart.ws.migrate.Migrate;
-import com.eriklievaart.ws.toolkit.io.FileTool;
+import com.eriklievaart.ws.toolkit.io.FileUtils;
 
 public class DependencyConfigParser {
 
 	private static Pattern headerPattern = Pattern.compile("^\\[([^=\\]]*+)(?:=([^\\]]*+))?\\]");
 
 	public static List<Header> parse(File file) {
-		return parse(FileTool.readLines(file));
+		return parse(FileUtils.readLines(file));
 	}
 
 	public static List<Header> parse(List<String> lines) {

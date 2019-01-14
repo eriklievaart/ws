@@ -4,7 +4,7 @@ import com.eriklievaart.ws.cli.Cli;
 import com.eriklievaart.ws.cli.CliInputException;
 import com.eriklievaart.ws.cli.CommandType;
 import com.eriklievaart.ws.cli.ProjectType;
-import com.eriklievaart.ws.toolkit.io.Console;
+import com.eriklievaart.ws.toolkit.io.ConsoleUtils;
 import com.eriklievaart.ws.workspace.Workspaces;
 
 public class Ws {
@@ -47,7 +47,7 @@ public class Ws {
 
 		} catch (CliInputException e) {
 			System.out.println();
-			Console.printError("*error*: " + e.getMessage());
+			ConsoleUtils.printError("*error*: " + e.getMessage());
 			System.out.println();
 			printHeader();
 		}

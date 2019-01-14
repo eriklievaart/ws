@@ -9,9 +9,9 @@ import com.eriklievaart.ws.config.PropertyReplacer;
 import com.eriklievaart.ws.config.ResourcePaths;
 import com.eriklievaart.ws.config.dependency.DependencyReference;
 import com.eriklievaart.ws.config.dependency.LibType;
-import com.eriklievaart.ws.toolkit.io.Console;
-import com.eriklievaart.ws.toolkit.io.FileTool;
-import com.eriklievaart.ws.toolkit.io.UrlTool;
+import com.eriklievaart.ws.toolkit.io.ConsoleUtils;
+import com.eriklievaart.ws.toolkit.io.FileUtils;
+import com.eriklievaart.ws.toolkit.io.UrlUtils;
 
 public class Eclipse {
 	private static final String TYPE_FILTER_KEY = "/instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.typefilter.enabled=";
@@ -32,14 +32,14 @@ public class Eclipse {
 		File template = EclipsePaths.getTemplateWorkbench();
 		File destination = EclipsePaths.getDestinationWorkbench(name);
 		if (!destination.exists()) {
-			FileTool.copyFile(template, destination);
+			FileUtils.copyFile(template, destination);
 		}
 	}
 
 	private static void updateTypeFilters() throws IOException {
 		File oxygen = EclipsePaths.getTemplateOxygenFile();
 
-		List<String> lines = FileTool.readLines(oxygen);
+		List<String> lines = FileUtils.readLines(oxygen);
 		for (int i = 0; i < lines.size(); i++) {
 			if (lines.get(i).startsWith(TYPE_FILTER_KEY)) {
 				lines.add(i, TYPE_FILTER_KEY + joinTypeFilters());
@@ -47,13 +47,13 @@ public class Eclipse {
 				break;
 			}
 		}
-		FileTool.writeLines(oxygen, lines);
+		FileUtils.writeLines(oxygen, lines);
 	}
 
 	private static StringBuilder joinTypeFilters() throws IOException {
 		StringBuilder builder = new StringBuilder();
 
-		for (String line : FileTool.readLines(EclipsePaths.getTemplateTypeFilterFile())) {
+		for (String line : FileUtils.readLines(EclipsePaths.getTemplateTypeFilterFile())) {
 			String trimmed = line.trim();
 			if (trimmed.length() > 0 && !line.startsWith("#")) {
 				builder.append(trimmed);
@@ -68,11 +68,11 @@ public class Eclipse {
 	public static void generateProjectMetadata(String project) {
 		try {
 			String projectData = readAndReplace(EclipsePaths.getTemplateProjectFile(), project);
-			FileTool.writeStringToFile(projectData, ResourcePaths.getDestinationProjectFile(project));
+			FileUtils.writeStringToFile(projectData, ResourcePaths.getDestinationProjectFile(project));
 
 			String classpathData = readAndReplace(EclipsePaths.getTemplateClasspathFile(project), project);
 			classpathData = classpathData.replace("@lib@", libEntries(project));
-			FileTool.writeStringToFile(classpathData, ResourcePaths.getDestinationClasspathFile(project));
+			FileUtils.writeStringToFile(classpathData, ResourcePaths.getDestinationClasspathFile(project));
 
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -93,7 +93,7 @@ public class Eclipse {
 				sources.delete();
 			}
 			if (!sources.isFile()) {
-				Console.printError("sources not available: " + sources);
+				ConsoleUtils.printError("sources not available: " + sources);
 			}
 			builder.append(getClassPathEntry(lib, dependency, sources));
 		});
@@ -102,13 +102,13 @@ public class Eclipse {
 
 	private static String getClassPathEntry(LibType lib, DependencyReference dependency, File sources) {
 		PropertyReplacer replacer = new PropertyReplacer();
-		replacer.replace("@jar@", UrlTool.append("lib", lib.getDir(), dependency.getVersionedFileName()));
+		replacer.replace("@jar@", UrlUtils.append("lib", lib.getDir(), dependency.getVersionedFileName()));
 		replacer.replace("@sources@", sources.getAbsolutePath());
 		return replacer.apply("\t<classpathentry kind=\"lib\" path=\"@jar@\" sourcepath=\"@sources@\"/>\n");
 	}
 
 	private static String readAndReplace(File file, String project) throws IOException {
-		String data = FileTool.toString(file);
+		String data = FileUtils.toString(file);
 
 		PropertyReplacer replacer = new PropertyReplacer();
 		replacer.replace("@project@", project);

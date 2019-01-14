@@ -12,8 +12,8 @@ import java.util.function.Consumer;
 
 import com.eriklievaart.ws.cli.CliArguments;
 import com.eriklievaart.ws.config.EclipsePaths;
-import com.eriklievaart.ws.toolkit.io.Console;
-import com.eriklievaart.ws.toolkit.io.FileTool;
+import com.eriklievaart.ws.toolkit.io.ConsoleUtils;
+import com.eriklievaart.ws.toolkit.io.FileUtils;
 
 public class Workspaces {
 
@@ -102,16 +102,16 @@ public class Workspaces {
 		File file = EclipsePaths.getWorkspacesFile();
 		workspaces.clear();
 		if (file.exists()) {
-			for (Workspace workspace : WorkspacesIO.parseLines(FileTool.readLines(file))) {
+			for (Workspace workspace : WorkspacesIO.parseLines(FileUtils.readLines(file))) {
 				workspaces.put(workspace.getName(), workspace);
 			}
 		} else {
-			Console.printError("*warning*: file does not exist " + file + " no workspaces found");
+			ConsoleUtils.printError("*warning*: file does not exist " + file + " no workspaces found");
 		}
 	}
 
 	private static void save() {
-		FileTool.writeLines(EclipsePaths.getWorkspacesFile(), WorkspacesIO.getLines(workspaces.values()));
+		FileUtils.writeLines(EclipsePaths.getWorkspacesFile(), WorkspacesIO.getLines(workspaces.values()));
 		Antastic.generateMetadata();
 	}
 
@@ -147,7 +147,7 @@ public class Workspaces {
 					workspace.removeProject(projectName);
 					save();
 				} else {
-					Console.printError("*error*: link does not exist: " + workspaceName + ARROW + projectName);
+					ConsoleUtils.printError("*error*: link does not exist: " + workspaceName + ARROW + projectName);
 				}
 			}
 			System.out.println(workspace);
@@ -156,7 +156,7 @@ public class Workspaces {
 
 	private static void withWorkspace(String name, Consumer<Workspace> consumer) {
 		if (!workspaces.containsKey(name)) {
-			Console.printError("error: workspace does not exist => " + name);
+			ConsoleUtils.printError("error: workspace does not exist => " + name);
 			return;
 		}
 		consumer.accept(workspaces.get(name));

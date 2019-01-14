@@ -2,18 +2,18 @@ package com.eriklievaart.ws.config;
 
 import java.io.File;
 
-import com.eriklievaart.ws.toolkit.io.UrlTool;
+import com.eriklievaart.ws.toolkit.io.UrlUtils;
 
 public class EclipsePaths {
 	private static final String WORKSPACES_FILE = "@home@/Development/git/ws/main/static/workspaces.txt";
 	private static final String WORKSPACE_DIR = "@home@/Development/workspace/@workspace@";
 
 	private static final String TEMPLATE_ECLIPSE_DIR = "@home@/Development/git/ws/main/static/eclipse/";
-	private static final String TEMPLATE_OXYGEN_FILE = UrlTool.append(TEMPLATE_ECLIPSE_DIR, "oxygen.epf");
-	private static final String TEMPLATE_PROJECT_FILE = UrlTool.append(TEMPLATE_ECLIPSE_DIR, ".project");
-	private static final String TEMPLATE_CLASSPATH_FILE = UrlTool.append(TEMPLATE_ECLIPSE_DIR, ".classpath");
-	private static final String TEMPLATE_WORKBENCH_FILE = UrlTool.append(TEMPLATE_ECLIPSE_DIR, "workbench.xmi");
-	private static final String TEMPLATE_TYPE_FILTER_FILE = UrlTool.append(TEMPLATE_ECLIPSE_DIR, "typefilter.txt");
+	private static final String TEMPLATE_OXYGEN_FILE = UrlUtils.append(TEMPLATE_ECLIPSE_DIR, "oxygen.epf");
+	private static final String TEMPLATE_PROJECT_FILE = UrlUtils.append(TEMPLATE_ECLIPSE_DIR, ".project");
+	private static final String TEMPLATE_CLASSPATH_FILE = UrlUtils.append(TEMPLATE_ECLIPSE_DIR, ".classpath");
+	private static final String TEMPLATE_WORKBENCH_FILE = UrlUtils.append(TEMPLATE_ECLIPSE_DIR, "workbench.xmi");
+	private static final String TEMPLATE_TYPE_FILTER_FILE = UrlUtils.append(TEMPLATE_ECLIPSE_DIR, "typefilter.txt");
 
 	public static File getWorkspacesFile() {
 		return new File(new PropertyReplacer().apply(WORKSPACES_FILE));

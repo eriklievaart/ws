@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.eriklievaart.ws.config.ResourcePaths;
-import com.eriklievaart.ws.toolkit.io.FileTool;
+import com.eriklievaart.ws.toolkit.io.FileUtils;
 
 public class BundlePackage implements ManifestSource {
 
@@ -47,7 +47,7 @@ public class BundlePackage implements ManifestSource {
 	}
 
 	private void indexImports(File file) {
-		for (String line : FileTool.readLines(file)) {
+		for (String line : FileUtils.readLines(file)) {
 			if (line.startsWith("public") || line.startsWith("private") || line.startsWith("protected")) {
 				return;
 			}
