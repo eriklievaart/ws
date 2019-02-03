@@ -10,4 +10,5 @@ q felix osgi q toolkit
 refactor refactor
 regex regex
 synch synch toolkit
+tiqqer osgi tiqqer toolkit
 ws src toolkit ws
