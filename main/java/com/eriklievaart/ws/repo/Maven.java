@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.eriklievaart.ws.config.ResourcePaths;
 import com.eriklievaart.ws.config.dependency.DependencyReference;
+import com.eriklievaart.ws.toolkit.io.IORuntimeException;
 import com.eriklievaart.ws.toolkit.io.StreamUtils;
 import com.eriklievaart.ws.toolkit.io.UrlUtils;
 
@@ -28,18 +29,37 @@ public class Maven {
 	}
 
 	public static void download(DependencyReference dependency, File destination) {
-		String url = UrlUtils.append(MIRRORS.get(0), getMavenPath(dependency));
-		try {
-			httpGet(url, destination);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		try {
-			if (url.endsWith(".jar")) {
-				httpGet(url.replaceFirst("\\.jar$", "-sources.jar"), ResourcePaths.getSourceJar(destination));
+		downloadBinary(dependency, destination);
+		downloadSources(dependency, destination);
+	}
+
+	private static void downloadBinary(DependencyReference dependency, File destination) {
+		for (String mirror : MIRRORS) {
+			String url = UrlUtils.append(mirror, getMavenPath(dependency));
+			try {
+				httpGet(url, destination);
+				return;
+			} catch (IOException e) {
+				continue;
 			}
-		} catch (IOException e) {
-			// it still works fine without sources
+		}
+		throw new IORuntimeException("Unable to download " + dependency);
+	}
+
+	private static void downloadSources(DependencyReference dependency, File destination) {
+		File sourceJar = ResourcePaths.getSourceJar(destination);
+		if (!sourceJar.exists()) {
+			for (String mirror : MIRRORS) {
+				String url = UrlUtils.append(mirror, getMavenPath(dependency).replaceFirst("\\.jar$", "-sources.jar"));
+				try {
+					if (url.endsWith(".jar")) {
+						httpGet(url, sourceJar);
+					}
+					return;
+				} catch (IOException e) {
+					continue; // can still build without sources
+				}
+			}
 		}
 	}
 

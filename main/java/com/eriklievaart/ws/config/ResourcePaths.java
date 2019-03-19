@@ -59,6 +59,10 @@ public class ResourcePaths {
 		return new File(new PropertyReplacer().apply(INDEX_FILE));
 	}
 
+	public static File getGitDir(String project) {
+		return new File(PropertyReplacer.project(project).apply(SOURCE_GIT_DIR));
+	}
+
 	public static File getDependencyFile(String project) {
 		return new File(PropertyReplacer.project(project).apply(DEPENDENCY_FILE));
 	}

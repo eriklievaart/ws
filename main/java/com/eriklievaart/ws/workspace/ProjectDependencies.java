@@ -34,6 +34,16 @@ public class ProjectDependencies {
 			parseDependencies();
 
 		} else {
+			warnDependencyMissing();
+		}
+	}
+
+	private void warnDependencyMissing() {
+		File git = ResourcePaths.getGitDir(project);
+		if (!git.exists()) {
+			System.out.println("git dir unavailable: " + git);
+
+		} else {
 			System.out.println("*warning* file not found => " + file);
 		}
 	}
