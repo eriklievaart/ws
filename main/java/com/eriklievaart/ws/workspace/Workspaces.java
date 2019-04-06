@@ -37,30 +37,31 @@ public class Workspaces {
 		System.out.println("workspaces" + workspaces.keySet());
 	}
 
-	public static void generateAll() {
+	public static void createWorkspace(String workspace) {
+		if (workspace.equals(CliArguments.ALL_WORKSPACES)) {
+			createAllWorkSpaces();
+		} else {
+			createNamedWorkspace(workspace);
+		}
+	}
+
+	public static void createAllWorkSpaces() {
 		Set<String> projects = new HashSet<>();
 
 		iterateWorkspaces(ws -> {
-			createWorkspace(ws.getName());
+			createNamedWorkspace(ws.getName());
 			projects.addAll(ws.getProjects());
 		});
-		for (String project : projects) {
-			Eclipse.generateProjectMetadata(project);
-		}
 		Antastic.generateMetadata();
 	}
 
-	public static void createWorkspace(String workspace) {
-		if (workspace.equals(CliArguments.ALL_WORKSPACES)) {
-			generateAll();
-		} else {
-			withWorkspace(workspace, ws -> {
-				Eclipse.createWorkspace(ws);
-				ws.getProjects().forEach(p -> {
-					Eclipse.generateProjectMetadata(p);
-				});
+	private static void createNamedWorkspace(String workspace) {
+		withWorkspace(workspace, ws -> {
+			Eclipse.createWorkspace(ws);
+			ws.getProjects().forEach(p -> {
+				Eclipse.generateProjectMetadata(p);
 			});
-		}
+		});
 	}
 
 	public static void defineWorkspace(String name, List<String> projects) {
