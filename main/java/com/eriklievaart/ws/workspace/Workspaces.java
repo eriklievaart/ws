@@ -1,24 +1,33 @@
 package com.eriklievaart.ws.workspace;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.function.Consumer;
 
 import com.eriklievaart.ws.cli.CliArguments;
 import com.eriklievaart.ws.config.EclipsePaths;
+import com.eriklievaart.ws.config.ResourcePaths;
+import com.eriklievaart.ws.runtime.RuntimeCommand;
+import com.eriklievaart.ws.runtime.RuntimeInvoker;
 import com.eriklievaart.ws.toolkit.io.ConsoleUtils;
 import com.eriklievaart.ws.toolkit.io.FileUtils;
+import com.eriklievaart.ws.toolkit.io.IORuntimeException;
+import com.eriklievaart.ws.toolkit.io.PropertiesUtils;
 
 public class Workspaces {
 
 	private static final String ARROW = " -> ";
 	private static Map<String, Workspace> workspaces = new Hashtable<>();
+	private static List<String> features = Arrays.asList("java", "osgi", "jar", "war", "zip", "install", "application");
 
 	static {
 		load();
@@ -55,18 +64,26 @@ public class Workspaces {
 	}
 
 	public static void defineWorkspace(String name, List<String> projects) {
-		if (workspaces.containsKey(name)) {
-			System.out.println("overwriting existing workspace " + name);
-			workspaces.remove(name);
-		}
-		Workspace workspace = new Workspace(name);
+		Workspace workspace = workspaces.getOrDefault(name, new Workspace(name));
+		removeMissingProjects(workspace, projects);
+
 		for (String project : projects) {
-			workspace.addProject(project);
+			linkProjectNoSave(workspace, project);
+			System.out.println();
 		}
 		workspaces.put(name, workspace);
 		System.out.println("workspace stored: " + workspace);
 		createWorkspace(name);
 		save();
+	}
+
+	private static void removeMissingProjects(Workspace workspace, List<String> keep) {
+		ArrayList<String> fullCopy = new ArrayList<>(workspace.getProjects());
+		for (String project : fullCopy) {
+			if (!keep.contains(project)) {
+				workspace.removeProject(project);
+			}
+		}
 	}
 
 	public static void deleteWorkspace(String name) {
@@ -127,16 +144,31 @@ public class Workspaces {
 		withWorkspace(workspaceName, workspace -> {
 			for (String projectName : projects) {
 				if (workspace.containsProject(projectName)) {
-					System.out.println("link already exists: " + workspaceName + ARROW + projectName);
+					System.out.println("already linked: " + workspaceName + ARROW + projectName);
 				} else {
-					System.out.println("added new link: " + workspaceName + ARROW + projectName);
-					workspace.addProject(projectName);
-					Eclipse.generateProjectMetadata(projectName);
-					save();
+					linkProject(workspace, projectName);
 				}
 			}
 			System.out.println(workspace);
 		});
+	}
+
+	private static void linkProject(Workspace workspace, String projectName) {
+		linkProjectNoSave(workspace, projectName);
+		save();
+	}
+
+	private static void linkProjectNoSave(Workspace workspace, String projectName) {
+		if (!ResourcePaths.getGitDir(projectName).isDirectory()) {
+			init(projectName);
+		}
+		if (workspace.containsProject(projectName)) {
+			System.out.println("already linked: " + workspace.getName() + ARROW + projectName);
+			return;
+		}
+		workspace.addProject(projectName);
+		Eclipse.generateProjectMetadata(projectName);
+		System.out.println("added new link: " + workspace.getName() + ARROW + projectName);
 	}
 
 	public static void unlinkProjects(String workspaceName, List<String> projects) {
@@ -160,5 +192,50 @@ public class Workspaces {
 			return;
 		}
 		consumer.accept(workspaces.get(name));
+	}
+
+	private static void init(String project) {
+		File propertyFile = ResourcePaths.getAntPropertyFile(project);
+		Properties properties = propertyFile.exists() ? PropertiesUtils.load(propertyFile) : new Properties();
+
+		if (properties.isEmpty()) {
+			ConsoleUtils.println("Select features to enable for project '" + project + "'");
+			ConsoleUtils.println(features.toString());
+			selectFeatures(properties);
+		}
+		File gitDir = ResourcePaths.getGitDir(project);
+		gitDir.mkdirs();
+		RuntimeInvoker.invoke(new RuntimeCommand("git", "init"), gitDir);
+
+		if (Eclipse.isJavaEnabled(properties)) {
+			createEmptyDependenciesFile(project);
+		}
+		if (!properties.isEmpty()) {
+			PropertiesUtils.store(properties, propertyFile);
+		}
+	}
+
+	private static void createEmptyDependenciesFile(String project) {
+		try {
+			File file = ResourcePaths.getDependencyFile(project);
+			file.getParentFile().mkdirs();
+			file.createNewFile();
+
+		} catch (IOException e) {
+			throw new IORuntimeException(e);
+		}
+	}
+
+	private static void selectFeatures(Properties properties) {
+		String input = System.console().readLine();
+		for (String feature : input.toLowerCase().split("[^a-zA-Z]++")) {
+			if (feature.length() > 0) {
+				if (features.contains(feature)) {
+					properties.put("enable." + feature, "true");
+				} else {
+					ConsoleUtils.printWarning("skipping unknown feature " + feature);
+				}
+			}
+		}
 	}
 }

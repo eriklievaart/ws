@@ -11,6 +11,7 @@ public class ResourcePaths {
 	private static final String REMOTE_DIR = UrlUtils.append(REPO_DIR, "remote");
 	private static final String SNAPSHOT_FILE = UrlUtils.append(REPO_DIR, "local/@project@/snapshot/@project@.jar");
 
+	private static final String PROJECT_DIR = "@home@/Development/project/@project@";
 	private static final String DEPENDENCY_FILE = "@home@/Development/git/@project@/main/config/dependencies.txt";
 	private static final String ANT_PROPERTY_FILE = "@home@/Development/git/@project@/main/config/ant.properties";
 	private static final String LIB_DIR = "@home@/Development/project/@project@/lib";
@@ -69,6 +70,10 @@ public class ResourcePaths {
 
 	public static File getLibRootDir(String project) {
 		return new File(PropertyReplacer.project(project).apply(LIB_DIR));
+	}
+
+	public static File getProjectDir(String project) {
+		return new File(PropertyReplacer.project(project).apply(PROJECT_DIR));
 	}
 
 	public static File getDestinationProjectDir(String project) {

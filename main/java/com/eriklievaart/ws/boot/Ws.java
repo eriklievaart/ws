@@ -51,7 +51,7 @@ public class Ws {
 			System.out.println();
 			printHeader();
 		}
-		System.out.println();
+		System.out.println("\nnext command:");
 	}
 
 	private static void printHeader() {

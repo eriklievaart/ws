@@ -1,8 +1,11 @@
 package com.eriklievaart.ws.workspace;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
 import com.eriklievaart.ws.config.EclipsePaths;
 import com.eriklievaart.ws.config.PropertyReplacer;
@@ -15,6 +18,7 @@ import com.eriklievaart.ws.toolkit.io.UrlUtils;
 
 public class Eclipse {
 	private static final String TYPE_FILTER_KEY = "/instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.typefilter.enabled=";
+	private static final String JAVA_PROPERTY = "enable.java";
 	private static final String SEMICOLON = ";";
 
 	public static void createWorkspace(Workspace workspace) {
@@ -67,16 +71,49 @@ public class Eclipse {
 
 	public static void generateProjectMetadata(String project) {
 		try {
-			String projectData = readAndReplace(EclipsePaths.getTemplateProjectFile(), project);
-			FileUtils.writeStringToFile(projectData, ResourcePaths.getDestinationProjectFile(project));
-
-			String classpathData = readAndReplace(EclipsePaths.getTemplateClasspathFile(project), project);
-			classpathData = classpathData.replace("@lib@", libEntries(project));
-			FileUtils.writeStringToFile(classpathData, ResourcePaths.getDestinationClasspathFile(project));
-
+			if (isJavaProject(project)) {
+				generateJavaProjectMetadata(project);
+			} else {
+				generateBasicProjectMetadata(project);
+			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private static void generateJavaProjectMetadata(String project) throws IOException {
+		String projectData = readAndReplace(EclipsePaths.getTemplateJavaProjectFile(), project);
+		FileUtils.writeStringToFile(projectData, ResourcePaths.getDestinationProjectFile(project));
+
+		String classpathData = readAndReplace(EclipsePaths.getTemplateClasspathFile(project), project);
+		classpathData = classpathData.replace("@lib@", libEntries(project));
+		FileUtils.writeStringToFile(classpathData, ResourcePaths.getDestinationClasspathFile(project));
+	}
+
+	private static void generateBasicProjectMetadata(String project) throws IOException {
+		String projectData = readAndReplace(EclipsePaths.getTemplateBasicProjectFile(), project);
+		FileUtils.writeStringToFile(projectData, ResourcePaths.getDestinationProjectFile(project));
+	}
+
+	private static boolean isJavaProject(String project) {
+		Properties properties = new Properties();
+		File file = ResourcePaths.getAntPropertyFile(project);
+
+		if (file.isFile()) {
+			try (InputStream is = new FileInputStream(file)) {
+				properties.load(is);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return isJavaEnabled(properties);
+	}
+
+	public static boolean isJavaEnabled(Properties properties) {
+		if (!properties.containsKey(JAVA_PROPERTY)) {
+			return false;
+		}
+		return properties.get(JAVA_PROPERTY).toString().trim().toLowerCase().equals("true");
 	}
 
 	private static CharSequence libEntries(String project) {

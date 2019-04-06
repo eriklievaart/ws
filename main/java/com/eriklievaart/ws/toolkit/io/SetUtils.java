@@ -5,9 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SetUtils {
+
 	/**
 	 * Create a Set from the specified elements.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <E> Set<E> of(final E... elements) {
 		Set<E> set = new HashSet<>();
 		set.addAll(Arrays.asList(elements));

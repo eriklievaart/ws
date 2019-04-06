@@ -3,6 +3,7 @@ package com.eriklievaart.ws.toolkit.io;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -79,6 +80,15 @@ public class StreamUtils {
 	public static void writeString(String data, OutputStream os) {
 		try (PrintWriter writer = new PrintWriter(os)) {
 			writer.write(data);
+		}
+	}
+
+	public static void close(Closeable value) {
+		try {
+			if (value != null) {
+				value.close();
+			}
+		} catch (IOException ignore) {
 		}
 	}
 }
