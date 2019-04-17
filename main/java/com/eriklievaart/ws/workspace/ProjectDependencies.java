@@ -91,7 +91,8 @@ public class ProjectDependencies {
 	}
 
 	public void resolveAll() {
-		for (Header header : index.values()) {
+		for (LibType lib : LibType.values()) {
+			Header header = index.containsKey(lib) ? index.get(lib) : new Header(lib.getDir());
 			Set<String> keep = resolveLibDir(header);
 			deleteUnusedDependencies(header, keep);
 		}
