@@ -49,6 +49,8 @@ public class Workspaces {
 		Set<String> projects = new HashSet<>();
 
 		iterateWorkspaces(ws -> {
+			System.out.println();
+			System.out.println("# generate " + ws.getName() + " #");
 			createNamedWorkspace(ws.getName());
 			projects.addAll(ws.getProjects());
 		});
