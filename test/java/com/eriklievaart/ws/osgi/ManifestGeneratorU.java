@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import com.eriklievaart.toolkit.lang.api.collection.ListTool;
 import com.eriklievaart.toolkit.lang.api.collection.SetTool;
-import com.eriklievaart.toolkit.test.api.BombSquad;
+import com.eriklievaart.toolkit.mock.BombSquad;
 
 public class ManifestGeneratorU {
 
