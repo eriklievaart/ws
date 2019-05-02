@@ -7,6 +7,7 @@ java.sql.Date;
 
 javax.print.DocFlavor.URL;
 javax.management.RuntimeErrorException;
+javax.swing.text.html.HTMLDocument.Iterator;
 
 junit.framework.*;
 

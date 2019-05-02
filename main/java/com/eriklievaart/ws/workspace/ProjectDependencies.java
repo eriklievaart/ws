@@ -112,10 +112,13 @@ public class ProjectDependencies {
 	}
 
 	private void deleteUnusedDependencies(Header header, Set<String> keep) {
-		for (File lib : getLibDir(header).listFiles()) {
-			if (!keep.contains(lib.getName())) {
-				ConsoleUtils.printWarning("Deleting dependency: " + lib);
-				lib.delete();
+		File[] files = getLibDir(header).listFiles();
+		if (files != null) {
+			for (File lib : files) {
+				if (!keep.contains(lib.getName())) {
+					ConsoleUtils.printWarning("Deleting dependency: " + lib);
+					lib.delete();
+				}
 			}
 		}
 	}
