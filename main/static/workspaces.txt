@@ -2,7 +2,7 @@ antastic antastic toolkit
 blog blog javalightning pb-parser toolkit
 crawl crawl osgi podcast toolkit
 doclauncher doclauncher
-hu felix hu huback hufront humigrate hushared hutest javalightning osgi postgres tiqqer tmp toolkit
+hu felix hu huback hudeploy hufront humigrate hushared hutest javalightning osgi postgres tiqqer tmp toolkit
 imager imager toolkit
 links links
 q felix osgi q toolkit
