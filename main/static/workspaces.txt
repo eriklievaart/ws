@@ -1,5 +1,5 @@
 antastic antastic toolkit
-blog blog javalightning pb-parser toolkit
+blog blog cheat javalightning pb-parser toolkit
 crawl crawl osgi toolkit
 doclauncher doclauncher
 hu felix hu huback hudeploy hufront humigrate hushared hutest javalightning osgi postgres tiqqer tmp toolkit
