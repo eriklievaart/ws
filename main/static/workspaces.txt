@@ -5,7 +5,7 @@ doclauncher doclauncher
 hu felix hu huback hudeploy hufront humigrate hushared hutest javalightning osgi postgres tiqqer tmp toolkit
 imager imager toolkit
 links links
-q felix osgi q toolkit
+q felix osgi q tiqqer toolkit
 refactor refactor
 regex regex
 synch synch toolkit
