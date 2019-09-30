@@ -9,7 +9,7 @@ import java.util.Set;
 import com.eriklievaart.ws.toolkit.io.SetUtils;
 
 public class WhitespaceFileScanner {
-	private Set<String> extensions = SetUtils.of("tpl", "properties", "txt", "css", "sh", "java");
+	private Set<String> extensions = SetUtils.of("tpl", "ftl", "ftlh", "properties", "txt", "css", "sh", "java");
 	private Set<String> skip = SetUtils.of(".git", "zip");
 
 	public void removeTrailingWhitespace(File root) {
