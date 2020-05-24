@@ -47,6 +47,6 @@ public class ImportStatement {
 
 	@Override
 	public String toString() {
-		return file + ": " + statement;
+		return file + " -> [" + statement + "]";
 	}
 }
