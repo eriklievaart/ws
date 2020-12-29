@@ -86,7 +86,7 @@ public class Eclipse {
 		FileUtils.writeStringToFile(projectData, ResourcePaths.getDestinationProjectFile(project));
 
 		String classpathData = readAndReplace(EclipsePaths.getTemplateClasspathFile(project), project);
-		classpathData = classpathData.replace("@lib@", libEntries(project));
+		classpathData = classpathData.replace("@lib@", libEntries(project)).replace("@jdk@", "JavaSE-11");
 		FileUtils.writeStringToFile(classpathData, ResourcePaths.getDestinationClasspathFile(project));
 	}
 

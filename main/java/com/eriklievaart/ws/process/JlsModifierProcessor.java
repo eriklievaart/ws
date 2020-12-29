@@ -51,7 +51,7 @@ public class JlsModifierProcessor implements LineProcessor {
 		Collections.sort(modifiers, new Comparator<String>() {
 			@Override
 			public int compare(String o1, String o2) {
-				return new Integer(SORTED_MODIFIERS.indexOf(o1)).compareTo(SORTED_MODIFIERS.indexOf(o2));
+				return Integer.valueOf(SORTED_MODIFIERS.indexOf(o1)).compareTo(SORTED_MODIFIERS.indexOf(o2));
 			}
 		});
 	}

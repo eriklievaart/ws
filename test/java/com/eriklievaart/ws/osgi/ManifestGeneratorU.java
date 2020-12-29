@@ -73,7 +73,7 @@ public class ManifestGeneratorU {
 		DummyManifestSource source = new DummyManifestSource();
 		source.addApiPackage("com.example.api");
 		String result = ManifestGenerator.generateManifestBody(source).get();
-		Assertions.assertThat(result).contains("com.example.api");
+		Assertions.assertThat(result).contains("Export-Package: com.example.api");
 	}
 
 	@Test
@@ -86,10 +86,30 @@ public class ManifestGeneratorU {
 	}
 
 	@Test
+	public void generateManifestBodyImport() throws Exception {
+		DummyManifestSource source = new DummyManifestSource();
+		source.setBasePackage("org.example");
+		source.addImport("com.example");
+		String result = ManifestGenerator.generateManifestBody(source).get();
+		Assertions.assertThat(result).contains("Import-Package: com.example");
+	}
+
+	@Test
+	public void generateManifestBodyImportYourExport() throws Exception {
+		DummyManifestSource source = new DummyManifestSource();
+		source.setBasePackage("org.example");
+		source.addImport("com.example.i");
+		source.addApiPackage("com.example.e.api");
+		String result = ManifestGenerator.generateManifestBody(source).get();
+		Assertions.assertThat(result).contains("Import-Package: com.example.e.api,com.example");
+	}
+
+	@Test
 	public void getImportString() throws Exception {
 		String api = "com.eriklievaart.project.api";
 		String base = "com.eriklievaart.other";
-		Assertions.assertThat(ManifestGenerator.getImportString(Arrays.asList(api), base).get()).isEqualTo(api);
+		String result = ManifestGenerator.getImportString(Arrays.asList(api), base).get();
+		Assertions.assertThat(result).isEqualTo(api);
 	}
 
 	@Test
@@ -197,13 +217,13 @@ public class ManifestGeneratorU {
 
 			@Override
 			public Set<ImportStatement> getImports() {
-				return SetTool.of(new ImportStatement("import com.eriklievaart.api.QUi", null));
+				return SetTool.of(new ImportStatement("com.eriklievaart.api.QUi", null));
 			}
 		});
 		StringBuilder expect = new StringBuilder();
 		expect.append("Bundle-Activator: com.eriklievaart.q.ui.Activator\n");
 		expect.append("Export-Package: com.eriklievaart.q.ui.api\n");
-		expect.append("Import-Package: import com.eriklievaart.api.QUi\n");
+		expect.append("Import-Package: com.eriklievaart.q.ui.api,com.eriklievaart.api.QUi\n");
 		Assertions.assertThat(result.get()).isEqualTo(expect.toString());
 	}
 }

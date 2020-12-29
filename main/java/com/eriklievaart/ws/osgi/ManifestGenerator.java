@@ -1,5 +1,6 @@
 package com.eriklievaart.ws.osgi;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -48,9 +49,20 @@ public class ManifestGenerator {
 		if (source.isActivatorPresent()) {
 			builder.append("Bundle-Activator: ").append(source.getActivatorClass()).append(NL);
 		}
-		getExportString(source).ifPresent(exports -> builder.append("Export-Package: ").append(exports).append(NL));
-		getImportString(source).ifPresent(imports -> builder.append("Import-Package: ").append(imports).append(NL));
+		Optional<String> exportOptional = getExportString(source);
+		Optional<String> importOptional = getImportString(source);
+		exportOptional.ifPresent(exports -> builder.append("Export-Package: ").append(exports).append(NL));
+		if (exportOptional.isPresent() || importOptional.isPresent()) {
+			builder.append("Import-Package: ").append(mergePackages(exportOptional, importOptional)).append(NL);
+		}
 		return Optional.of(builder.toString());
+	}
+
+	private static String mergePackages(Optional<String> exports, Optional<String> imports) {
+		List<String> available = new ArrayList<>();
+		exports.ifPresent(string -> available.add(string));
+		imports.ifPresent(string -> available.add(string));
+		return String.join(",", available);
 	}
 
 	static Optional<String> getImportString(ManifestSource source) {

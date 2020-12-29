@@ -41,7 +41,7 @@ public class ProjectDependencies {
 	private void warnDependencyMissing() {
 		File git = ResourcePaths.getGitDir(project);
 		if (!git.exists()) {
-			System.out.println("git dir unavailable: " + git);
+			throw new RuntimeException("git dir unavailable: " + git);
 
 		} else {
 			System.out.println("*warning* file not found => " + file);
