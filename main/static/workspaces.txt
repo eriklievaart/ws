@@ -4,6 +4,7 @@ crawl crawl osgi toolkit
 doclauncher doclauncher
 hu felix hu huback hudeploy hufront humigrate hushared hutest javalightning osgi postgres tiqqer tmp toolkit
 imager imager toolkit
+kakalot crawl kakalot toolkit
 links links toolkit
 q felix osgi q tiqqer toolkit
 refactor refactor
