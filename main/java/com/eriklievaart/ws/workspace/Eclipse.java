@@ -14,6 +14,7 @@ import com.eriklievaart.ws.config.dependency.DependencyReference;
 import com.eriklievaart.ws.config.dependency.LibType;
 import com.eriklievaart.ws.toolkit.io.ConsoleUtils;
 import com.eriklievaart.ws.toolkit.io.FileUtils;
+import com.eriklievaart.ws.toolkit.io.StreamUtils;
 import com.eriklievaart.ws.toolkit.io.UrlUtils;
 
 public class Eclipse {
@@ -57,7 +58,7 @@ public class Eclipse {
 	private static StringBuilder joinTypeFilters() throws IOException {
 		StringBuilder builder = new StringBuilder();
 
-		for (String line : FileUtils.readLines(EclipsePaths.getTemplateTypeFilterFile())) {
+		for (String line : FileUtils.readLines(EclipsePaths.getTemplateTypeFilterInputStream())) {
 			String trimmed = line.trim();
 			if (trimmed.length() > 0 && !line.startsWith("#")) {
 				builder.append(trimmed);
@@ -82,16 +83,16 @@ public class Eclipse {
 	}
 
 	private static void generateJavaProjectMetadata(String project) throws IOException {
-		String projectData = readAndReplace(EclipsePaths.getTemplateJavaProjectFile(), project);
+		String projectData = readAndReplace(EclipsePaths.getTemplateJavaProjectInputStream(), project);
 		FileUtils.writeStringToFile(projectData, ResourcePaths.getDestinationProjectFile(project));
 
-		String classpathData = readAndReplace(EclipsePaths.getTemplateClasspathFile(project), project);
+		String classpathData = readAndReplace(EclipsePaths.getTemplateClasspathInputStream(), project);
 		classpathData = classpathData.replace("@lib@", libEntries(project)).replace("@jdk@", "JavaSE-11");
 		FileUtils.writeStringToFile(classpathData, ResourcePaths.getDestinationClasspathFile(project));
 	}
 
 	private static void generateBasicProjectMetadata(String project) throws IOException {
-		String projectData = readAndReplace(EclipsePaths.getTemplateBasicProjectFile(), project);
+		String projectData = readAndReplace(EclipsePaths.getTemplateBasicProjectInputStream(), project);
 		FileUtils.writeStringToFile(projectData, ResourcePaths.getDestinationProjectFile(project));
 	}
 
@@ -144,8 +145,8 @@ public class Eclipse {
 		return replacer.apply("\t<classpathentry kind=\"lib\" path=\"@jar@\" sourcepath=\"@sources@\"/>\n");
 	}
 
-	private static String readAndReplace(File file, String project) throws IOException {
-		String data = FileUtils.toString(file);
+	private static String readAndReplace(InputStream is, String project) throws IOException {
+		String data = StreamUtils.toString(is);
 
 		PropertyReplacer replacer = new PropertyReplacer();
 		replacer.replace("@project@", project);
