@@ -231,7 +231,8 @@ public class Workspaces {
 
 	private static void selectFeatures(Properties properties) {
 		String input = System.console().readLine();
-		for (String feature : input.toLowerCase().split("[^a-zA-Z]++")) {
+		List<String> enabled = Arrays.asList(input.toLowerCase().split("[^a-zA-Z]++"));
+		for (String feature : enabled) {
 			if (feature.length() > 0) {
 				if (features.contains(feature)) {
 					properties.put("enable." + feature, "true");
@@ -240,5 +241,22 @@ public class Workspaces {
 				}
 			}
 		}
+		properties.put("target", getTarget(new HashSet<>(enabled)));
+	}
+
+	private static String getTarget(HashSet<String> enabled) {
+		if (enabled.contains("osgi")) {
+			if (enabled.contains("application")) {
+				return "master-osgi-deploy";
+			} else if (enabled.contains("install")) {
+				return "master-osgi-install";
+			}
+		}
+		if (enabled.contains("application")) {
+			return "master-jar-deploy";
+		} else if (enabled.contains("install")) {
+			return "master-install";
+		}
+		return enabled.contains("java") ? "master-resolve" : "master-clean";
 	}
 }

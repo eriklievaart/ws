@@ -1,11 +1,13 @@
 antastic antastic toolkit
 blog blog cheat felix javalightning pb-parser tmp toolkit
 crawl crawl osgi toolkit
+demo demo
 doclauncher doclauncher
 hu felix hu huback hudeploy hufront humigrate hushared hutest javalightning osgi postgres tiqqer tmp toolkit
 imager imager toolkit
 kakalot crawl kakalot toolkit
 links links toolkit
+proxy felix javalightning osgi proxy toolkit
 q felix osgi q tiqqer toolkit
 refactor refactor
 regex regex
