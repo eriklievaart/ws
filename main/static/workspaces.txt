@@ -1,14 +1,14 @@
 antastic antastic toolkit
-blog blog cheat felix javalightning osgi pb-parser tmp toolkit
+blog blog cheat felix-launcher javalightning osgi pb-parser tmp toolkit
 crawl crawl osgi toolkit
 doclauncher doclauncher
 game pong space toolkit
-hu felix hu huback hudeploy hufront humigrate hushared hutest javalightning osgi postgres tiqqer tmp toolkit
+hu felix-launcher hu huback hudeploy hufront humigrate hushared hutest javalightning osgi postgres tiqqer tmp toolkit
 imager imager toolkit
 kakalot crawl kakalot toolkit
 links links toolkit
-proxy felix javalightning osgi proxy tiqqer toolkit
-q felix osgi q tiqqer toolkit
+proxy felix-launcher javalightning osgi proxy tiqqer toolkit
+q felix-launcher osgi q tiqqer toolkit
 refactor refactor
 regex regex
 synch synch toolkit
