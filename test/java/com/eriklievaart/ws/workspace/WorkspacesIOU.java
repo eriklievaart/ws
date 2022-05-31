@@ -16,14 +16,14 @@ public class WorkspacesIOU {
 
 		Workspace blog = new Workspace("blog");
 		blog.addProject("blog");
-		blog.addProject("javalightning");
+		blog.addProject("jl");
 		blog.addProject("toolkit");
 
 		List<String> lines = WorkspacesIO.getLines(Arrays.asList(antastic, blog));
 		List<Workspace> parsed = WorkspacesIO.parseLines(lines);
 
 		String expectedLine1 = "antastic antastic toolkit";
-		String expectedLine2 = "blog blog javalightning toolkit";
+		String expectedLine2 = "blog blog jl toolkit";
 		Assertions.assertThat(lines).containsExactly(expectedLine1, expectedLine2);
 
 		Assertions.assertThat(parsed).hasSize(2);
