@@ -3,11 +3,13 @@ blog blog cheat felix-launcher jl osgi pb-parser tmp toolkit
 crawl crawl osgi toolkit
 doclauncher doclauncher
 game pong space toolkit
+hasselt jl osgi tiqqer toolkit trainer
 hu felix-launcher hu huback hudeploy hufront humigrate hushared hutest jl osgi postgres tiqqer tmp toolkit
+im im toolkit
 imager imager toolkit
 kakalot crawl kakalot toolkit
 links links toolkit
-pcg jl pcg osgi tiqqer toolkit
+pcg jl osgi pcg tiqqer toolkit
 proxy felix-launcher jl osgi proxy tiqqer toolkit
 q felix-launcher osgi q tiqqer toolkit
 refactor refactor
