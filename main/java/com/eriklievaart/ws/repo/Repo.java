@@ -21,6 +21,25 @@ public class Repo {
 		load();
 	}
 
+	public static void showInfo(String search) {
+		List<String> keys = new ArrayList<>(index.keySet());
+		Collections.sort(keys);
+
+		if (search.equals("@")) {
+			for (String key : keys) {
+				if (index.get(key).isSnapshot()) {
+					System.out.println(key);
+				}
+			}
+		} else {
+			for (String key : keys) {
+				if (key.contains(search)) {
+					System.out.println(index.get(key).getInstallString());
+				}
+			}
+		}
+	}
+
 	public void storeSnapshot(File jar) {
 		if (!jar.getName().toLowerCase().endsWith(".jar")) {
 			throw new RuntimeException("File name should end with jar: " + jar);

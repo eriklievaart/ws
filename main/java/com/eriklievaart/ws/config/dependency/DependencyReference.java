@@ -56,6 +56,10 @@ public class DependencyReference implements Comparable<DependencyReference> {
 		}
 	}
 
+	public String getInstallString() {
+		return artifactId + " " + groupId + " " + version;
+	}
+
 	@Override
 	public String toString() {
 		return "Dependency[" + artifactId + ", " + groupId + ", " + version + "]";

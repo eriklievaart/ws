@@ -49,7 +49,7 @@ public class ResourcePaths {
 		if (!jar.getName().endsWith("jar")) {
 			throw new RuntimeException("Not a jar! " + jar);
 		}
-		return new File(parent, name.replaceFirst("\\.jar$", "-src.jar"));
+		return new File(parent.getPath().replace("/bundle", "/src"), name.replaceFirst("\\.jar$", "-src.jar"));
 	}
 
 	public static String getRemoteDir() {

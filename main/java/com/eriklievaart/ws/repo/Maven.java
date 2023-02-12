@@ -21,8 +21,7 @@ public class Maven {
 
 	static {
 		MIRRORS.add("https://repo1.maven.org/maven2");
-		MIRRORS.add("https://mirrors.ibiblio.org/pub/mirrors/maven2");
-		MIRRORS.add("https://maven.antelink.com/content/repositories/central/");
+		MIRRORS.add("https://mvnrepository.com/artifact");
 		MIRRORS.add("https://maven2.mirrors.skynet.be/pub/maven2/");
 		MIRRORS.add("https://repo.maven.apache.org/maven2");
 		MIRRORS.add("http://repository.springsource.com/maven/bundles/release");
@@ -66,6 +65,8 @@ public class Maven {
 	private static void httpGet(String url, File destination) throws IOException {
 		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 		connection.setRequestMethod("GET");
+		connection.setConnectTimeout(2000);
+		connection.setReadTimeout(5000);
 		int responseCode = connection.getResponseCode();
 
 		System.out.println("GET URL : " + url + " status " + responseCode);
