@@ -20,3 +20,5 @@ org.eclipse.jetty.server.Authentication.*
 org.mockito.internal.*;
 
 sun.*;
+jdk.internal.*;
+

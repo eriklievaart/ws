@@ -9,7 +9,24 @@ public class DependencyReference implements Comparable<DependencyReference> {
 	private String version = SNAPSHOT;
 
 	public DependencyReference(String artifactId) {
+		if (artifactId == null) {
+			throw new IllegalArgumentException("artifactId cannot be <null>!");
+		}
 		this.artifactId = artifactId;
+	}
+
+	public static DependencyReference of(String raw) {
+		if (raw.contains(":")) {
+
+			String[] grpArtTypeVer = raw.split(":");
+			DependencyReference result = new DependencyReference(grpArtTypeVer[1]);
+			result.groupId = grpArtTypeVer[0];
+			result.version = grpArtTypeVer[grpArtTypeVer.length - 1];
+			return result;
+
+		} else {
+			return new DependencyReference(raw);
+		}
 	}
 
 	public String getArtifactId() {
@@ -24,7 +41,17 @@ public class DependencyReference implements Comparable<DependencyReference> {
 		this.groupId = groupId;
 	}
 
+	public String getVersionProperty() {
+		if (!version.startsWith("${")) {
+			throw new IllegalStateException("version '" + version + "' does not start with property!");
+		}
+		return version.substring(2).replaceFirst("\\}$", "");
+	}
+
 	public String getVersion() {
+		if (versionContainsProperty()) {
+			throw new RuntimeException(" version contains property! use getVersionProperty() instead.\n" + toString());
+		}
 		return version;
 	}
 
@@ -58,6 +85,37 @@ public class DependencyReference implements Comparable<DependencyReference> {
 
 	public String getInstallString() {
 		return artifactId + " " + groupId + " " + version;
+	}
+
+	public boolean versionContainsProperty() {
+		return version.contains("${");
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof DependencyReference)) {
+			return false;
+		}
+		DependencyReference other = (DependencyReference) obj;
+		if (!artifactId.equals(other.artifactId)) {
+			return false;
+		}
+		if (!groupId.equals(other.groupId)) {
+			return false;
+		}
+		return version.equals(other.version);
+	}
+
+	@Override
+	public int hashCode() {
+		return artifactId.hashCode() + groupId.hashCode() + version.hashCode();
+	}
+
+	public String getShortString() {
+		return artifactId + " | " + groupId + " | " + version;
 	}
 
 	@Override

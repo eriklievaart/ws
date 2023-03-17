@@ -22,4 +22,9 @@ public class Project {
 	public BundleMetadata scanBundleMetadata() {
 		return new BundleMetadata(name);
 	}
+
+	@Override
+	public String toString() {
+		return "Project[" + name + "]";
+	}
 }

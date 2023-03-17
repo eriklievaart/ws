@@ -62,6 +62,21 @@ public class Maven {
 		}
 	}
 
+	public static void downloadPom(DependencyReference dependency, File file) throws IOException {
+		if (dependency.versionContainsProperty()) {
+			throw new IllegalArgumentException(dependency.toString());
+		}
+		if (!file.exists()) {
+			for (String mirror : MIRRORS) {
+				String url = UrlUtils.append(mirror, getMavenPath(dependency).replaceFirst("\\.jar$", ".pom"));
+				if (url.endsWith(".pom")) {
+					httpGet(url, file);
+				}
+				return;
+			}
+		}
+	}
+
 	private static void httpGet(String url, File destination) throws IOException {
 		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 		connection.setRequestMethod("GET");

@@ -1,6 +1,7 @@
 package com.eriklievaart.ws.repo;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
@@ -9,6 +10,8 @@ import java.util.Map;
 
 import com.eriklievaart.ws.config.ResourcePaths;
 import com.eriklievaart.ws.config.dependency.DependencyReference;
+import com.eriklievaart.ws.repo.pom.Pom;
+import com.eriklievaart.ws.repo.pom.PomResolver;
 import com.eriklievaart.ws.toolkit.io.ConsoleUtils;
 import com.eriklievaart.ws.toolkit.io.FileUtils;
 import com.eriklievaart.ws.toolkit.io.IORuntimeException;
@@ -37,6 +40,24 @@ public class Repo {
 					System.out.println(index.get(key).getInstallString());
 				}
 			}
+		}
+	}
+
+	public static void showDependencyTree(DependencyReference dependency) throws IOException {
+		Pom pom = PomResolver.loadPom(dependency);
+		System.out.println();
+		printPom(pom, 0);
+	}
+
+	private static void printPom(Pom pom, int depth) {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < depth; i++) {
+			builder.append("  ");
+		}
+		System.out.println(builder.append(pom.getSpecification().getShortString()));
+
+		for (Pom child : pom.getDependencies()) {
+			printPom(child, depth + 1);
 		}
 	}
 

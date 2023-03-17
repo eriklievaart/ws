@@ -2,6 +2,7 @@ package com.eriklievaart.ws.config;
 
 import java.io.File;
 
+import com.eriklievaart.ws.config.dependency.DependencyReference;
 import com.eriklievaart.ws.toolkit.io.UrlUtils;
 
 public class ResourcePaths {
@@ -10,6 +11,7 @@ public class ResourcePaths {
 	private static final String INDEX_FILE = UrlUtils.append(REPO_DIR, "index.txt");
 	private static final String REMOTE_DIR = UrlUtils.append(REPO_DIR, "remote");
 	private static final String SNAPSHOT_FILE = UrlUtils.append(REPO_DIR, "local/@project@/snapshot/@project@.jar");
+	private static final String POM_FILE = UrlUtils.append(REPO_DIR, "pom/@group@/@artifact@/@version@.xml");
 
 	private static final String PROJECT_DIR = "@home@/Development/project/@project@";
 	private static final String DEPENDENCY_FILE = "@home@/Development/git/@project@/main/config/dependencies.txt";
@@ -146,5 +148,13 @@ public class ResourcePaths {
 
 	public static File getSourceJavaDir(String project, String bundle) {
 		return new File(PropertyReplacer.bundle(project, bundle).apply(SOURCE_JAVA_DIR));
+	}
+
+	public static File getPomFile(DependencyReference dependency) {
+		PropertyReplacer replacer = new PropertyReplacer();
+		replacer.replace("@group@", dependency.getGroupId());
+		replacer.replace("@artifact@", dependency.getArtifactId());
+		replacer.replace("@version@", dependency.getVersion());
+		return new File(replacer.apply(POM_FILE));
 	}
 }

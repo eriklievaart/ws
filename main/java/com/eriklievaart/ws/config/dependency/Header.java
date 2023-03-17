@@ -9,7 +9,7 @@ public class Header {
 
 	private String name;
 	private File location;
-	private List<DependencyReference> references = new ArrayList<DependencyReference>();
+	private List<DependencyReference> references = new ArrayList<>();
 
 	public Header(String name) {
 		this.name = name;
@@ -37,9 +37,21 @@ public class Header {
 	}
 
 	public List<DependencyReference> getDependencies() {
-		ArrayList<DependencyReference> result = new ArrayList<DependencyReference>(references);
-		Collections.sort(result);
+		ArrayList<DependencyReference> result = new ArrayList<>(references);
+		sortAndRemoveDuplicates(result);
 		return result;
+	}
+
+	private void sortAndRemoveDuplicates(ArrayList<DependencyReference> result) {
+		Collections.sort(result);
+		DependencyReference last = null;
+
+		for (int i = 0; i < result.size(); i++) {
+			if (result.get(i).equals(last)) {
+				result.remove(i--);
+			}
+			last = result.get(i);
+		}
 	}
 
 	@Override

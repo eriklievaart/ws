@@ -38,6 +38,21 @@ public class ProjectDependencies {
 		}
 	}
 
+	public void addDependencies(List<String> dependencies) throws IOException {
+		Header header = index.computeIfAbsent(LibType.COMPILE, e -> new Header("compile"));
+		for (String dependency : dependencies) {
+			header.addDependencyReference(DependencyReference.of(dependency));
+		}
+		resolveAll();
+		writeback();
+		dump();
+	}
+
+	private void dump() {
+		System.out.println("\nvim " + file + "\n");
+		System.out.println(FileUtils.toString(file).trim());
+	}
+
 	private void warnDependencyMissing() {
 		File git = ResourcePaths.getGitDir(project);
 		if (!git.exists()) {
