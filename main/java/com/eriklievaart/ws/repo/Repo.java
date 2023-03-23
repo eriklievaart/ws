@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.eriklievaart.ws.config.ResourcePaths;
 import com.eriklievaart.ws.config.dependency.DependencyReference;
+import com.eriklievaart.ws.repo.pom.MavenPomSource;
 import com.eriklievaart.ws.repo.pom.Pom;
 import com.eriklievaart.ws.repo.pom.PomResolver;
 import com.eriklievaart.ws.toolkit.io.ConsoleUtils;
@@ -44,7 +45,7 @@ public class Repo {
 	}
 
 	public static void showDependencyTree(DependencyReference dependency) throws IOException {
-		Pom pom = PomResolver.loadPom(dependency);
+		Pom pom = new PomResolver(new MavenPomSource()).loadPom(dependency);
 		System.out.println();
 		printPom(pom, 0);
 	}

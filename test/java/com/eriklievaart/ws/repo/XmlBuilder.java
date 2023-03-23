@@ -36,22 +36,47 @@ public class XmlBuilder {
 	}
 
 	public void createElement(String element) {
-		nestedElement(element);
-		popElement();
+		openAndCloseTags(element.split("/"));
 	}
 
 	public void createElement(String element, Consumer<XmlBuilder> consumer) {
-		nestedElement(element);
+		String[] path = element.split("/");
+		openTags(path);
 		consumer.accept(this);
-		popElement();
+		closeTags(path);
+	}
+
+	private void openAndCloseTags(String[] tags) {
+		openTags(tags);
+		closeTags(tags);
+	}
+
+	private void closeTags(String[] tags) {
+		for (int i = tags.length - 1; i >= 0; i--) {
+			closeTag(tags[i]);
+		}
+	}
+
+	private void openTags(String[] tags) {
+		for (String tag : tags) {
+			openTag(tag);
+		}
+	}
+
+	private void openTag(String tag) {
+		head.append("<").append(tag).append(">");
+	}
+
+	private void closeTag(String tag) {
+		head.append("</").append(tag).append(">");
 	}
 
 	private void popElement() {
-		head.append("</").append(stack.pop()).append(">");
+		closeTag(stack.pop());
 	}
 
 	private void nestedElement(String element) {
-		head.append("<").append(element).append(">");
+		openTag(element);
 		stack.add(element);
 	}
 

@@ -34,12 +34,32 @@ public class XmlBuilderU {
 	}
 
 	@Test
+	public void createElementNested() {
+		XmlBuilder builder = new XmlBuilder();
+		builder.into("/project");
+		builder.createElement("dependencies/dependency");
+
+		String expect = "<project><dependencies><dependency></dependency></dependencies></project>";
+		Check.isEqual(builder.toString(), expect);
+	}
+
+	@Test
 	public void createElementWithNestedContent() {
 		XmlBuilder builder = new XmlBuilder();
 		builder.into("/project/dependencies");
 		builder.createElement("dependency", b -> b.multiText("artifactId=aid|groupId=grp"));
 
 		String expect = "<project><dependencies><dependency><artifactId>aid</artifactId><groupId>grp</groupId></dependency></dependencies></project>";
+		Check.isEqual(builder.toString(), expect);
+	}
+
+	@Test
+	public void createElementNestedWithNestedContent() {
+		XmlBuilder builder = new XmlBuilder();
+		builder.into("/project");
+		builder.createElement("dependencies/dependency", b -> b.multiText("version=1.0"));
+
+		String expect = "<project><dependencies><dependency><version>1.0</version></dependency></dependencies></project>";
 		Check.isEqual(builder.toString(), expect);
 	}
 }
