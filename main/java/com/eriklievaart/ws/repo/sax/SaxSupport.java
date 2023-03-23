@@ -11,6 +11,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.eriklievaart.ws.toolkit.io.StreamUtils;
+
 public class SaxSupport {
 
 	public static void parse(File file, DefaultHandler handler) throws IOException {
@@ -29,6 +31,14 @@ public class SaxSupport {
 		} catch (SAXException | ParserConfigurationException e) {
 			throw new IOException(e);
 		}
+	}
+
+	public static void parse(String xml, DefaultHandler handler) throws IOException {
+		parse(StreamUtils.toInputStream(xml), handler);
+	}
+
+	public static void parse(String xml, SaxPartialHandler handler) throws IOException {
+		parse(StreamUtils.toInputStream(xml), handler);
 	}
 
 	public static void parse(InputStream is, SaxPartialHandler handler) throws IOException {

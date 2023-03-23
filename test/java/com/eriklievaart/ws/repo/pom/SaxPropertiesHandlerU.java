@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import com.eriklievaart.toolkit.io.api.StreamTool;
 import com.eriklievaart.toolkit.lang.api.check.Check;
+import com.eriklievaart.ws.repo.XmlBuilder;
 import com.eriklievaart.ws.repo.sax.SaxSupport;
 
 public class SaxPropertiesHandlerU {
@@ -41,8 +42,9 @@ public class SaxPropertiesHandlerU {
 	public void parsePropertiesRealPom() throws IOException {
 		SaxPropertiesHandler testable = new SaxPropertiesHandler();
 
-		String xml = "/pom/parent-dependency-management.xml";
-		SaxSupport.parse(getClass().getResourceAsStream(xml), testable);
+		XmlBuilder xml = new XmlBuilder("/project/properties");
+		xml.multiText("ant.version=1.10.13");
+		SaxSupport.parse(xml.toString(), testable);
 
 		Check.isEqual(testable.get("ant.version"), "1.10.13");
 	}

@@ -1,13 +1,13 @@
 package com.eriklievaart.ws.repo.pom;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import com.eriklievaart.toolkit.lang.api.check.CheckCollection;
 import com.eriklievaart.ws.config.dependency.DependencyReference;
+import com.eriklievaart.ws.repo.XmlBuilder;
 import com.eriklievaart.ws.repo.sax.SaxSupport;
 
 public class SaxDependencyManagementHandlerU {
@@ -16,9 +16,11 @@ public class SaxDependencyManagementHandlerU {
 	public void skipStandardDependencies() throws IOException {
 		SaxDependencyManagementHandler testable = new SaxDependencyManagementHandler();
 
-		try (InputStream is = getClass().getResourceAsStream("/pom/dependency-x2.xml")) {
-			SaxSupport.parse(is, testable);
-		}
+		XmlBuilder xml = new XmlBuilder("/project/dependencies/dependency");
+		xml.multiText("artifactId=slf4j-api|groupId=org.slf4j|version=2.0.6");
+
+		SaxSupport.parse(xml.toString(), testable);
+
 		// should only look in <dependencyManagement> not in <dependencies>
 		CheckCollection.isEmpty(testable.getDependencies());
 	}
@@ -27,14 +29,14 @@ public class SaxDependencyManagementHandlerU {
 	public void parseDependencyManagement() throws IOException {
 		SaxDependencyManagementHandler testable = new SaxDependencyManagementHandler();
 
-		try (InputStream is = getClass().getResourceAsStream("/pom/parent-dependency-management.xml")) {
-			SaxSupport.parse(is, testable);
-		}
+		XmlBuilder xml = new XmlBuilder("/project/dependencyManagement/dependencies/dependency");
+		xml.multiText("artifactId=guice|groupId=com.google.inject|version=${guice.version}");
+
+		SaxSupport.parse(xml.toString(), testable);
+
 		DependencyReference guice = new DependencyReference("guice");
 		guice.setGroupId("com.google.inject");
 		guice.setVersion("${guice.version}");
-		Assertions.assertThat(testable.getDependencies().contains(guice));
-
-		CheckCollection.isSize(testable.getDependencies(), 205);
+		Assertions.assertThat(testable.getDependencies()).contains(guice);
 	}
 }

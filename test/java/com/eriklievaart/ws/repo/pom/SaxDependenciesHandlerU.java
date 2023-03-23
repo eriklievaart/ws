@@ -1,7 +1,6 @@
 package com.eriklievaart.ws.repo.pom;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -11,6 +10,7 @@ import com.eriklievaart.toolkit.lang.api.check.Check;
 import com.eriklievaart.toolkit.lang.api.check.CheckCollection;
 import com.eriklievaart.toolkit.lang.api.collection.CollectionTool;
 import com.eriklievaart.ws.config.dependency.DependencyReference;
+import com.eriklievaart.ws.repo.XmlBuilder;
 import com.eriklievaart.ws.repo.sax.SaxSupport;
 
 public class SaxDependenciesHandlerU {
@@ -19,9 +19,10 @@ public class SaxDependenciesHandlerU {
 	public void parseDependencyTest() throws IOException {
 		SaxDependenciesHandler testable = new SaxDependenciesHandler();
 
-		try (InputStream is = getClass().getResourceAsStream("/pom/test-dependency.xml")) {
-			SaxSupport.parse(is, testable);
-		}
+		XmlBuilder xml = new XmlBuilder("/project/dependencies/dependency");
+		xml.multiText("artifactId=slf4j-api|groupId=org.slf4j|version=2.0.6|scope=test");
+
+		SaxSupport.parse(xml.toString(), testable);
 		// dependency has test scope, so should be skipped
 		CheckCollection.isEmpty(testable.getDependencies());
 	}
@@ -30,9 +31,11 @@ public class SaxDependenciesHandlerU {
 	public void parseDependencyWithVersion() throws IOException {
 		SaxDependenciesHandler testable = new SaxDependenciesHandler();
 
-		try (InputStream is = getClass().getResourceAsStream("/pom/dependency-with-version.xml")) {
-			SaxSupport.parse(is, testable);
-		}
+		XmlBuilder xml = new XmlBuilder("/project/dependencies/dependency");
+		xml.multiText("artifactId=slf4j-api|groupId=org.slf4j|version=2.0.6");
+
+		SaxSupport.parse(xml.toString(), testable);
+
 		List<DependencyReference> dependencies = testable.getDependencies();
 		DependencyReference dependency = CollectionTool.getSingle(dependencies);
 
@@ -45,9 +48,15 @@ public class SaxDependenciesHandlerU {
 	public void parseDependencyX2() throws IOException {
 		SaxDependenciesHandler testable = new SaxDependenciesHandler();
 
-		try (InputStream is = getClass().getResourceAsStream("/pom/dependency-x2.xml")) {
-			SaxSupport.parse(is, testable);
-		}
+		XmlBuilder xml = new XmlBuilder("/project/dependencies");
+		xml.createElement("dependency", b -> {
+			b.multiText("artifactId=slf4j-api|groupId=org.slf4j|version=2.0.6");
+		});
+		xml.createElement("dependency", b -> {
+			b.multiText("artifactId=jetty-util|groupId=org.eclipse.jetty|version=11.0.14");
+		});
+
+		SaxSupport.parse(xml.toString(), testable);
 		List<DependencyReference> dependencies = testable.getDependencies();
 
 		DependencyReference slf4j = new DependencyReference("slf4j-api");
