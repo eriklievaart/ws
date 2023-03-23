@@ -17,4 +17,12 @@ public class SaxContext {
 	public String getPath() {
 		return path;
 	}
+
+	public boolean pathEquals(String value) {
+		return path.equals(value);
+	}
+
+	public boolean pathStartsWith(String value) {
+		return path.startsWith(value);
+	}
 }

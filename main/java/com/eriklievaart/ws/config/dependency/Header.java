@@ -42,6 +42,10 @@ public class Header {
 		return result;
 	}
 
+	public boolean isEmpty() {
+		return references.isEmpty();
+	}
+
 	private void sortAndRemoveDuplicates(ArrayList<DependencyReference> result) {
 		Collections.sort(result);
 		DependencyReference last = null;

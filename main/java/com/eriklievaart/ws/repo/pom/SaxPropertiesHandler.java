@@ -17,19 +17,14 @@ public class SaxPropertiesHandler implements SaxPartialHandler {
 	}
 
 	@Override
-	public boolean evaluateText(String tail) {
-		return true;
-	}
-
-	@Override
 	public void text(String value, SaxContext context) {
-		if (context.getPath().equals("project/version")) {
+		if (context.pathEquals("project/version")) {
 			properties.put("project.version", value);
 		}
-		if (context.getPath().equals("project/parent/version")) {
+		if (context.pathEquals("project/parent/version")) {
 			properties.put("project.parent.version", value);
 		}
-		if (context.getPath().startsWith("project/properties")) {
+		if (context.pathStartsWith("project/properties")) {
 			properties.put(context.getElementName(), value);
 		}
 	}

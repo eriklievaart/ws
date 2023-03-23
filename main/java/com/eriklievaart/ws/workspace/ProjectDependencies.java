@@ -44,6 +44,9 @@ public class ProjectDependencies {
 			header.addDependencyReference(DependencyReference.of(dependency));
 		}
 		resolveAll();
+		if (header.isEmpty()) {
+			index.remove(LibType.COMPILE);
+		}
 		writeback();
 		dump();
 	}

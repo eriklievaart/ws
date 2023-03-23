@@ -40,11 +40,9 @@ public class SaxDependenciesHandler implements SaxPartialHandler {
 
 	@Override
 	public void leaveContext() {
-		if (!properties.containsKey("artifactId")) {
-			properties.clear();
-			return;
-		}
-		if (properties.containsKey("scope") && properties.get("scope").equals("test")) {
+		boolean isTestArtifact = properties.containsKey("scope") && properties.get("scope").equals("test");
+		boolean missingArtifactId = !properties.containsKey("artifactId");
+		if (isTestArtifact || missingArtifactId) {
 			properties.clear();
 			return;
 		}
