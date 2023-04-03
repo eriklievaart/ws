@@ -16,6 +16,7 @@ public class Rp {
 			builder.append("usage:\n");
 			builder.append("\t repo @                        lists available snapshots \n");
 			builder.append("\t repo -i [project] [query]...  install dependencies \n");
+			builder.append("\t repo -t [dependency]          show maven dependency tree\n");
 			System.err.println(builder);
 			return;
 		}
