@@ -17,5 +17,4 @@ public class MavenPomSource implements PomSource {
 		Maven.downloadPom(dependency, file);
 		return FileUtils.toString(file);
 	}
-
 }

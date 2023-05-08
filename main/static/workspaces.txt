@@ -9,7 +9,7 @@ links links toolkit
 pcg jl osgi pcg tiqqer toolkit
 proxy felix-launcher jl osgi proxy tiqqer toolkit
 q felix-launcher osgi q tiqqer toolkit
-rags jl osgi rags toolkit
+rags felix-launcher jl osgi rags toolkit
 refactor refactor
 regex regex
 synch synch toolkit
