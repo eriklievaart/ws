@@ -39,19 +39,33 @@ public class ProjectDependencies {
 	}
 
 	public void addDependencies(List<String> dependencies) throws IOException {
-		Header header = index.computeIfAbsent(LibType.COMPILE, e -> new Header("compile"));
+		Header header = getInsertHeader();
 		for (String dependency : dependencies) {
 			header.addDependencyReference(DependencyReference.of(dependency));
 		}
+		removeEmptyHeaderCategories();
 		resolveAll();
-		if (header.isEmpty()) {
-			index.remove(LibType.COMPILE);
-		}
 		writeback();
 		dump();
 	}
 
-	private void dump() {
+	private void removeEmptyHeaderCategories() {
+		List<LibType> keys = new ArrayList<>(index.keySet());
+		keys.forEach(category -> {
+			if (index.get(category).isEmpty()) {
+				index.remove(category);
+			}
+		});
+	}
+
+	private Header getInsertHeader() {
+		if (index.containsKey(LibType.BUNDLE)) {
+			return index.get(LibType.BUNDLE);
+		}
+		return index.computeIfAbsent(LibType.COMPILE, e -> new Header("compile"));
+	}
+
+	public void dump() {
 		System.out.println("\nvim " + file + "\n");
 		System.out.println(FileUtils.toString(file).trim());
 	}
