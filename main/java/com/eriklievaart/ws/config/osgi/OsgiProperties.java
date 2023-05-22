@@ -2,6 +2,7 @@ package com.eriklievaart.ws.config.osgi;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
@@ -58,6 +59,7 @@ public class OsgiProperties {
 		StringBuilder builder = new StringBuilder("\n");
 
 		List<OsgiProperty> copy = new ArrayList<>(properties);
+		Collections.sort(copy);
 		appendCategory("felix.", copy, builder);
 		appendCategory("org.", copy, builder);
 		copy.forEach(property -> appendProperty(property, builder));

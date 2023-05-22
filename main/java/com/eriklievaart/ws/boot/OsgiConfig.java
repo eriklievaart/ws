@@ -28,7 +28,7 @@ public class OsgiConfig {
 		properties.ensureKeyExists("felix.cache.rootdir", "/tmp/felix/" + project);
 
 		Set<String> bundles = getBundleList(root);
-		if (bundles.contains("toolkit.logging")) {
+		if (bundles.contains("toolkit-logging")) {
 			File logConfig = new File(root, "logging.ini");
 			logConfig.createNewFile();
 			properties.ensureKeyExists("com.eriklievaart.toolkit.logging.config.file", logConfig.getAbsolutePath());
