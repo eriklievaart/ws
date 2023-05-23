@@ -29,9 +29,10 @@ public class OsgiConfig {
 
 		Set<String> bundles = getBundleList(root);
 		if (bundles.contains("toolkit-logging")) {
-			File logConfig = new File(root, "logging.ini");
-			logConfig.createNewFile();
-			properties.ensureKeyExists("com.eriklievaart.toolkit.logging.config.file", logConfig.getAbsolutePath());
+			new File(root, "logging.ini").createNewFile();
+			if (properties.missingKey("com.eriklievaart.toolkit.logging.config.file")) {
+				properties.ensureKeyExists("com.eriklievaart.toolkit.logging.config.dir", root.getAbsolutePath());
+			}
 		}
 		if (bundles.contains("jl-core")) {
 			properties.ensureKeyExists("org.apache.felix.http.whiteboardEnabled", "true");

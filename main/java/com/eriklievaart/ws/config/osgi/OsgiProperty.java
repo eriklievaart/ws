@@ -19,6 +19,10 @@ public class OsgiProperty implements Comparable<OsgiProperty> {
 		return comment;
 	}
 
+	public boolean isActive() {
+		return !comment;
+	}
+
 	public String getKey() {
 		return key;
 	}

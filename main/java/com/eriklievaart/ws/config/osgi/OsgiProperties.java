@@ -8,6 +8,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import com.eriklievaart.ws.toolkit.io.FileUtils;
 
@@ -22,6 +23,10 @@ public class OsgiProperties {
 			properties.add(new OsgiProperty(key, value, false));
 			changed = true;
 		}
+	}
+
+	public boolean missingKey(String key) {
+		return !keys.contains(key);
 	}
 
 	public void load(File config) {
@@ -57,20 +62,20 @@ public class OsgiProperties {
 
 	private String createFileContents() {
 		StringBuilder builder = new StringBuilder("\n");
-
 		List<OsgiProperty> copy = new ArrayList<>(properties);
 		Collections.sort(copy);
-		appendCategory("felix.", copy, builder);
-		appendCategory("org.", copy, builder);
-		copy.forEach(property -> appendProperty(property, builder));
 
+		appendCategory(copy, builder, p -> p.getKey().startsWith("felix."));
+		appendCategory(copy, builder, p -> p.getKey().startsWith("org."));
+		appendCategory(copy, builder, p -> p.isActive());
+		appendCategory(copy, builder, p -> true);
 		return builder.toString();
 	}
 
-	private void appendCategory(String prefix, List<OsgiProperty> copy, StringBuilder builder) {
+	private void appendCategory(List<OsgiProperty> copy, StringBuilder builder, Predicate<OsgiProperty> predicate) {
 		for (int i = 0; i < copy.size(); i++) {
 			OsgiProperty property = copy.get(i);
-			if (property.getKey().startsWith(prefix)) {
+			if (predicate.test(property)) {
 				appendProperty(property, builder);
 				copy.remove(i--);
 			}
