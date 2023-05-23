@@ -21,27 +21,38 @@ public class OsgiConfig {
 		properties.store(config);
 	}
 
-	private static void addMissingProperties(File root, OsgiProperties properties) throws IOException {
+	private static void addMissingProperties(File root, OsgiProperties osgi) throws IOException {
 		String project = root.getName();
-		String home = System.getProperty("user.home");
 
-		properties.ensureKeyExists("felix.cache.rootdir", "/tmp/felix/" + project);
+		osgi.ensureKeyExists("felix.cache.rootdir", "/tmp/felix/" + project);
 
 		Set<String> bundles = getBundleList(root);
+		addToolkitProperties(root, bundles, osgi);
+		addJavalightningProperties(project, bundles, osgi);
+	}
+
+	private static void addToolkitProperties(File root, Set<String> bundles, OsgiProperties osgi) throws IOException {
 		if (bundles.contains("toolkit-logging")) {
 			new File(root, "logging.ini").createNewFile();
-			if (properties.missingKey("com.eriklievaart.toolkit.logging.config.file")) {
-				properties.ensureKeyExists("com.eriklievaart.toolkit.logging.config.dir", root.getAbsolutePath());
+			if (osgi.missingKey("com.eriklievaart.toolkit.logging.config.file")) {
+				osgi.ensureKeyExists("com.eriklievaart.toolkit.logging.config.dir", root.getAbsolutePath());
 			}
 		}
+	}
+
+	private static void addJavalightningProperties(String project, Set<String> bundles, OsgiProperties osgi) {
+		String home = System.getProperty("user.home");
 		if (bundles.contains("jl-core")) {
-			properties.ensureKeyExists("org.apache.felix.http.whiteboardEnabled", "true");
-			properties.ensureKeyExists("org.osgi.service.http.port", "8000");
+			osgi.ensureKeyExists("org.apache.felix.http.whiteboardEnabled", "true");
+			osgi.ensureKeyExists("org.osgi.service.http.port", "8000");
+		}
+		if (bundles.contains("jl-dev")) {
+			osgi.ensureKeyExists("com.eriklievaart.jl.dev", "true");
 		}
 		if (bundles.contains("jl-freemarker")) {
 			String resources = home + "/Development/git/" + project + "/main/resources";
-			properties.ensureKeyExists("com.eriklievaart.jl.freemarker.path", resources);
-			properties.ensureKeyExists("com.eriklievaart.jl.freemarker.timeout", "0");
+			osgi.ensureKeyExists("com.eriklievaart.jl.freemarker.path", resources);
+			osgi.ensureKeyExists("com.eriklievaart.jl.freemarker.timeout", "0");
 		}
 	}
 
