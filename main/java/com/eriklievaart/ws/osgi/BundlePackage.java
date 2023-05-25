@@ -3,6 +3,7 @@ package com.eriklievaart.ws.osgi;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.eriklievaart.ws.config.ResourcePaths;
@@ -20,16 +21,17 @@ public class BundlePackage implements ManifestSource {
 	public BundlePackage(String project, String bundle) {
 		this.project = project;
 		this.bundle = bundle;
-		this.javaDir = ResourcePaths.getSourceJavaDir(project, bundle);
+		this.javaDir = ResourcePaths.getSourceJavaBundleDir(project, bundle);
 
 		index();
 	}
 
 	private void index() {
-		index(ResourcePaths.getSourcePackageDir(project, bundle));
+		indexImportsAndExports(ResourcePaths.getSourcePackageBundleDir(project, bundle));
+		addConfiguredImports(ResourcePaths.getSourceBundleOsgiConfigFile(project, bundle));
 	}
 
-	private void index(File file) {
+	private void indexImportsAndExports(File file) {
 		String path = file.getAbsolutePath();
 
 		if (file.isDirectory()) {
@@ -38,11 +40,25 @@ public class BundlePackage implements ManifestSource {
 				apiExport.add(pkg);
 			}
 			for (File child : file.listFiles()) {
-				index(child);
+				indexImportsAndExports(child);
 			}
 		}
 		if (file.isFile() && file.getName().endsWith(".java")) {
 			indexImports(file);
+		}
+	}
+
+	private void addConfiguredImports(File config) {
+		if (!config.isFile()) {
+			return;
+		}
+		List<String> lines = FileUtils.readLines(config);
+		for (int i = 0; i < lines.size(); i++) {
+			String line = lines.get(i).trim();
+			if (line.isBlank() || line.startsWith("[") || line.startsWith("#")) {
+				continue;
+			}
+			apiImport.add(new ImportStatement(line, config));
 		}
 	}
 

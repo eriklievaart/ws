@@ -29,6 +29,7 @@ public class ResourcePaths {
 	private static final String SOURCE_MASTER_PACKAGE = "com.eriklievaart.@project@";
 	private static final String SOURCE_MASTER_ACTIVATOR_CLASS = "com.eriklievaart.@project@.Activator";
 	private static final String SOURCE_BUNDLE_DIR = UrlUtils.append(SOURCE_PACKAGE_DIR, "@bundle@");
+	private static final String SOURCE_BUNDLE_OSGI_FILE = UrlUtils.append(SOURCE_BUNDLE_DIR, "osgi.txt");
 	private static final String SOURCE_BUNDLE_ACTIVATOR_FILE = UrlUtils.append(SOURCE_BUNDLE_DIR, "Activator.java");
 	private static final String SOURCE_BUNDLE_PACKAGE = "com.eriklievaart.@project@.@bundle@";
 	private static final String SOURCE_BUNDLE_ACTIVATOR_CLASS = "com.eriklievaart.@project@.@bundle@.Activator";
@@ -142,12 +143,16 @@ public class ResourcePaths {
 		return new File(PropertyReplacer.project(project).apply(SOURCE_PACKAGE_DIR));
 	}
 
-	public static File getSourcePackageDir(String project, String bundle) {
+	public static File getSourcePackageBundleDir(String project, String bundle) {
 		return new File(PropertyReplacer.bundle(project, bundle).apply(SOURCE_BUNDLE_DIR));
 	}
 
-	public static File getSourceJavaDir(String project, String bundle) {
+	public static File getSourceJavaBundleDir(String project, String bundle) {
 		return new File(PropertyReplacer.bundle(project, bundle).apply(SOURCE_JAVA_DIR));
+	}
+
+	public static File getSourceBundleOsgiConfigFile(String project, String bundle) {
+		return new File(PropertyReplacer.bundle(project, bundle).apply(SOURCE_BUNDLE_OSGI_FILE));
 	}
 
 	public static File getPomFile(DependencyReference dependency) {

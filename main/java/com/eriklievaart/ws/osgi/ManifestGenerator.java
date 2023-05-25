@@ -33,9 +33,9 @@ public class ManifestGenerator {
 	static void validateImports(ManifestSource source) {
 		for (ImportStatement pkg : source.getImports()) {
 			boolean lievaart = pkg.startsWith("com.eriklievaart");
-			boolean ignore = pkg.startsWith(source.getBasePackage());
+			boolean skipOwnBundle = pkg.startsWith(source.getBasePackage());
 
-			if (lievaart && !ignore && !pkg.isApi()) {
+			if (lievaart && !skipOwnBundle && !pkg.isApi()) {
 				throw new RuntimeException("Invalid import! Not an api package: " + pkg);
 			}
 		}
