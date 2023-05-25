@@ -13,5 +13,4 @@ rags felix-launcher jl osgi rags tiqqer toolkit
 refactor refactor
 regex regex
 synch synch toolkit
-tiqqer osgi tiqqer toolkit
 ws src toolkit ws

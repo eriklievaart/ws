@@ -247,16 +247,16 @@ public class Workspaces {
 	private static String getTarget(HashSet<String> enabled) {
 		if (enabled.contains("osgi")) {
 			if (enabled.contains("application")) {
-				return "master-osgi-deploy";
+				return "osgi-deploy";
 			} else if (enabled.contains("install")) {
-				return "master-osgi-install";
+				return "osgi-install";
 			}
 		}
 		if (enabled.contains("application")) {
-			return "master-jar-deploy";
+			return "jar-deploy";
 		} else if (enabled.contains("install")) {
-			return "master-install";
+			return "install";
 		}
-		return enabled.contains("java") ? "master-resolve" : "master-clean";
+		return enabled.contains("java") ? "resolve" : "clean";
 	}
 }
