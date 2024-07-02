@@ -1,6 +1,8 @@
 
-[test]
+[bundle]
 toolkit @local @snapshot
+
+[test]
 toolkit-mock @local @snapshot
 assertj-core org.assertj 3.10.0
 junit junit 4.7

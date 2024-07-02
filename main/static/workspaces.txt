@@ -12,5 +12,6 @@ q felix-launcher osgi q tiqqer toolkit
 rags felix-launcher jl osgi rags tiqqer toolkit
 refactor refactor
 regex regex
+sandwich jl osgi sandwich toolkit
 synch synch toolkit
 ws src toolkit ws

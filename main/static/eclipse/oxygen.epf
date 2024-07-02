@@ -414,6 +414,8 @@ file_export_version=3.0
 
 /instance/org.eclipse.ui.editors/AbstractTextEditor.Color.Background.SystemDefault=false
 /instance/org.eclipse.ui.editors/AbstractTextEditor.Color.Background=220,220,220
+/instance/org.eclipse.ui.workbench/org.eclipse.ui.workbench.INACTIVE_TAB_TEXT_COLOR=94,92,100
+
 
 
 
