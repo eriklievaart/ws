@@ -1,10 +1,10 @@
 package com.eriklievaart.ws.cli;
 
-import java.util.EnumSet;
-import java.util.function.Consumer;
-
 import com.eriklievaart.ws.workspace.Antastic;
 import com.eriklievaart.ws.workspace.Workspaces;
+
+import java.util.EnumSet;
+import java.util.function.Consumer;
 
 public enum CommandType {
 

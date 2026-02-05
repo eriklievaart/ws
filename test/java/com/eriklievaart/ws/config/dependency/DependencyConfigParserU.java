@@ -7,11 +7,6 @@ import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import com.eriklievaart.ws.config.dependency.DependencyConfigParser;
-import com.eriklievaart.ws.config.dependency.DependencyReference;
-import com.eriklievaart.ws.config.dependency.Header;
-import com.eriklievaart.ws.config.dependency.Line;
-
 public class DependencyConfigParserU {
 
 	@Test

@@ -1,0 +1,14 @@
+package imports;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class Dummy {
+
+	public static void main(String[] args) {
+		List<String> list = Arrays.asList(args);
+		MyType.doSomething();
+		String message = "hello world: ";
+		System.out.println(message + list);
+	}
+}

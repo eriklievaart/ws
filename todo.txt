@@ -1,0 +1,30 @@
+
+
+PreProcess
+ImportsProcessor
+TypeIndex
+
+
+tasks
+	list classes in the dependency
+	update TypeIndex
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
