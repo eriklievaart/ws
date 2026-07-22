@@ -1,6 +1,5 @@
 package com.eriklievaart.ws.workspace;
 
-import com.eriklievaart.toolkit.lang.api.collection.NewCollection;
 import com.eriklievaart.ws.config.ResourcePaths;
 import com.eriklievaart.ws.config.dependency.DependencyConfigParser;
 import com.eriklievaart.ws.config.dependency.DependencyReference;
@@ -181,7 +180,7 @@ public class ProjectDependencies {
 	}
 
 	public List<DependencyReference> getDependencies(LibType type) {
-		return index.containsKey(type) ? index.get(type).getDependencies() : NewCollection.list();
+		return index.containsKey(type) ? index.get(type).getDependencies() : new ArrayList<>();
 	}
 
 	public File getSourceJar(DependencyReference dependency) {
