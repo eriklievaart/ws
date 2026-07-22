@@ -1,13 +1,84 @@
 
 
-PreProcess
-ImportsProcessor
-TypeIndex
 
 
-tasks
-	list classes in the dependency
-	update TypeIndex
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fix: remove duplication of code for lookup clz/package between ClassCmd/PackageCmd
+
+ClassCmd
+	create class
+		fill with template
+	rename class
+	move class
+	outline: list class methods
+
+TestCmd
+	create unit test
+	create integration test
+	run test
+
+search
+
+types
+	Dev (Ws)
+	DevCli
+	DevCliParser DevCliParserU
+	DevCliCommand
+	DevCliType
+	DevContext
+	Project
+
+	DevCliParserU
+
+	dev-api.txt
+
+	SearchEngine
+	SearchContext
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -55,7 +55,7 @@ public class ImportsProcessor implements LineProcessor {
 	public void addMissing(List<String> lines) {
 		for (String type : tokenizer.listTokens()) {
 			if (!imports.containsKey(type) && !types.isJavaLang(type)) {
-				String qualified = types.lookup(type);
+				String qualified = lookupImport(type);
 				if (qualified == null) {
 					System.out.println(file.getName() + ": missing import " + type);
 				} else if (!qualified.equals(ownPkg + "." + type)) {
@@ -67,6 +67,11 @@ public class ImportsProcessor implements LineProcessor {
 		}
 		removeAllImports(lines);
 		generateImports(lines);
+	}
+
+	private String lookupImport(String type) {
+		boolean main = file.getAbsolutePath().contains("/main/");
+		return main ? types.lookupInMain(type) : types.lookupInMainOrTest(type);
 	}
 
 	private void removeAllImports(List<String> lines) {

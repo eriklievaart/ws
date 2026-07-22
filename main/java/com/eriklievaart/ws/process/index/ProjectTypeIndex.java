@@ -31,7 +31,7 @@ public class ProjectTypeIndex {
 				validateNotJavaLang(name.replaceFirst("[.]java$", ""));
 				String full = file.getPath();
 				String path = full.substring(skipPath, full.length() - skipExtension);
-				index.add(path.replace('/', '.'));
+				index.add(path);
 			}
 		}
 	}

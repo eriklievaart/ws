@@ -1,5 +1,9 @@
 package com.eriklievaart.ws.osgi;
 
+import com.eriklievaart.toolkit.lang.api.collection.ListTool;
+import com.eriklievaart.toolkit.lang.api.collection.SetTool;
+import com.eriklievaart.toolkit.mock.BombSquad;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -10,10 +14,6 @@ import java.util.Set;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.eriklievaart.toolkit.lang.api.collection.ListTool;
-import com.eriklievaart.toolkit.lang.api.collection.SetTool;
-import com.eriklievaart.toolkit.mock.BombSquad;
 
 public class ManifestGeneratorU {
 

@@ -139,16 +139,16 @@ public class ResourcePaths {
 		return PropertyReplacer.project(project).apply(SOURCE_MASTER_PACKAGE);
 	}
 
+	public static File getSourceJavaDir(String project) {
+		return new File(PropertyReplacer.project(project).apply(SOURCE_JAVA_DIR));
+	}
+
 	public static File getSourcePackageDir(String project) {
 		return new File(PropertyReplacer.project(project).apply(SOURCE_PACKAGE_DIR));
 	}
 
 	public static File getSourcePackageBundleDir(String project, String bundle) {
 		return new File(PropertyReplacer.bundle(project, bundle).apply(SOURCE_BUNDLE_DIR));
-	}
-
-	public static File getSourceJavaBundleDir(String project, String bundle) {
-		return new File(PropertyReplacer.bundle(project, bundle).apply(SOURCE_JAVA_DIR));
 	}
 
 	public static File getSourceBundleOsgiConfigFile(String project, String bundle) {

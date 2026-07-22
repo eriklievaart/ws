@@ -1,5 +1,6 @@
 package com.eriklievaart.ws.boot;
 
+import com.eriklievaart.ws.config.dependency.DependencyReference;
 import com.eriklievaart.ws.config.dependency.LibType;
 import com.eriklievaart.ws.process.ChainedLineProcessor;
 import com.eriklievaart.ws.process.EmptyLineProcessor;
@@ -50,15 +51,18 @@ public class PreProcess {
 	private static TypeIndex createTypeIndex(File root) {
 		TypeIndex types = new TypeIndex();
 		types.scanDirectory(new File(root, "main/java"));
+		types.scanDirectory(new File(root, "test/java"));
 		types.loadCorePackages();
 
 		ProjectDependencies dependencies = new ProjectDependencies(root.getName());
-		dependencies.iterate((type, reference) -> {
-			if (type != LibType.BUNDLE) {
-				return;
-			}
-			types.scanJar(dependencies.getSourceJar(reference));
-		});
+		for (DependencyReference reference: dependencies.getDependencies(LibType.BUNDLE)) {
+			System.out.println("indexing main jar for imports: " + reference);
+			types.scanMainJar(dependencies.getSourceJar(reference));
+		}
+		for (DependencyReference reference: dependencies.getDependencies(LibType.TEST)) {
+			System.out.println("indexing test jar for imports: " + reference);
+			types.scanTestJar(dependencies.getSourceJar(reference));
+		}
 		return types;
 	}
 }

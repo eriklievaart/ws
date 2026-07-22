@@ -1,15 +1,15 @@
 package com.eriklievaart.ws.process.index;
 
-import com.eriklievaart.ws.toolkit.io.IORuntimeException;
-import com.eriklievaart.ws.toolkit.io.StreamUtils;
-import com.eriklievaart.ws.toolkit.io.ZipUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.eriklievaart.ws.toolkit.io.IORuntimeException;
+import com.eriklievaart.ws.toolkit.io.StreamUtils;
+import com.eriklievaart.ws.toolkit.io.ZipUtils;
 
 public class TypeIndex {
 
@@ -51,7 +51,16 @@ public class TypeIndex {
 		return lang.contains(type);
 	}
 
-	public String lookup(String type) {
+	public String lookupInMain(String type) {
+		for (LibraryIndex library : indexes) {
+			if (library.isMain() && library.contains(type)) {
+				return library.get(type);
+			}
+		}
+		return null;
+	}
+
+	public String lookupInMainOrTest(String type) {
 		for (LibraryIndex library : indexes) {
 			if (library.contains(type)) {
 				return library.get(type);
@@ -61,14 +70,29 @@ public class TypeIndex {
 	}
 
 	public void scanDirectory(File root) {
-		indexes.add(new ProjectTypeIndex(root, lang).getProjectIndex());
-	}
-
-	public void scanJar(File jar) {
-		LibraryIndex index = new LibraryIndex();
-		for (String path: ZipUtils.listPathsInJar(jar)) {
-			index.add(path);
+		LibraryIndex index = new ProjectTypeIndex(root, lang).getProjectIndex();
+		if (root.getAbsolutePath().contains("/test/")) {
+			index.setTest(true);
 		}
 		indexes.add(index);
+	}
+
+	public void scanMainJar(File jar) {
+		LibraryIndex index = scanJar(jar);
+		index.setTest(true);
+		indexes.add(index);
+	}
+
+	public void scanTestJar(File jar) {
+		LibraryIndex index = scanJar(jar);
+		indexes.add(index);
+	}
+
+	private LibraryIndex scanJar(File jar) {
+		LibraryIndex index = new LibraryIndex();
+		for (String path : ZipUtils.listPathsInJar(jar)) {
+			index.add(path.replaceFirst(".java$", ""));
+		}
+		return index;
 	}
 }

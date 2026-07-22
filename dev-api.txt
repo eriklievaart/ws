@@ -1,0 +1,95 @@
+
+
+#h2 repo
+# list repos
+repo
+# select repo
+repo [name]?
+
+
+#h2 packages
+# list packages
+package
+# select package
+package [name]
+
+
+#h2 class
+# list classes
+class
+# select class
+class [name]
+# search for class
+class -c [camel]
+# list class methods
+class -l
+# dump implementation
+class -d
+# rename class
+class -r [name]
+# move class
+class -m [package]
+# create class
+class -n [name]
+
+
+#h2 tests
+# create unit test
+test -u
+# create integration test
+test -i
+# run test
+test -r
+
+
+#h2 freemarker
+# list freemarker files
+freemarker
+# create freemarker template
+freemarker -n
+
+
+
+
+
+
+
+
+
+
+
+#h2 directory navigation
+ls
+cd
+cl
+search [query]
+	shorthand: . [query]
+	shorthand: / [query]
+file -c
+
+
+
+
+code templates
+	create class
+	freemarker
+
+
+
+engine templates
+.    search relative to current directory? package?
+/    search relative to project root
+@    search web resources (js, css, ftlh)
+'    full text search
+"    full text search
+~    camel case class name
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,15 @@
 package com.eriklievaart.ws.workspace;
 
+import com.eriklievaart.toolkit.lang.api.collection.NewCollection;
+import com.eriklievaart.ws.config.ResourcePaths;
+import com.eriklievaart.ws.config.dependency.DependencyConfigParser;
+import com.eriklievaart.ws.config.dependency.DependencyReference;
+import com.eriklievaart.ws.config.dependency.Header;
+import com.eriklievaart.ws.config.dependency.LibType;
+import com.eriklievaart.ws.repo.Repo;
+import com.eriklievaart.ws.toolkit.io.ConsoleUtils;
+import com.eriklievaart.ws.toolkit.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,15 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
-
-import com.eriklievaart.ws.config.ResourcePaths;
-import com.eriklievaart.ws.config.dependency.DependencyConfigParser;
-import com.eriklievaart.ws.config.dependency.DependencyReference;
-import com.eriklievaart.ws.config.dependency.Header;
-import com.eriklievaart.ws.config.dependency.LibType;
-import com.eriklievaart.ws.repo.Repo;
-import com.eriklievaart.ws.toolkit.io.ConsoleUtils;
-import com.eriklievaart.ws.toolkit.io.FileUtils;
 
 public class ProjectDependencies {
 
@@ -177,6 +178,10 @@ public class ProjectDependencies {
 				consumer.accept(type, reference);
 			}
 		});
+	}
+
+	public List<DependencyReference> getDependencies(LibType type) {
+		return index.containsKey(type) ? index.get(type).getDependencies() : NewCollection.list();
 	}
 
 	public File getSourceJar(DependencyReference dependency) {
