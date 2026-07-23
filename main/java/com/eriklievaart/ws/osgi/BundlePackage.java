@@ -21,7 +21,7 @@ public class BundlePackage implements ManifestSource {
 	public BundlePackage(String project, String bundle) {
 		this.project = project;
 		this.bundle = bundle;
-		this.javaDir = ResourcePaths.getSourcePackageBundleDir(project, bundle);
+		this.javaDir = ResourcePaths.getSourceJavaDir(project);
 
 		index();
 	}
